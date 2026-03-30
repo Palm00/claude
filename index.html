@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COSMOS — An Interactive Universe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@300;400&display=swap');
+
+  :root {
+    --void: #030108;
+    --star-white: #f0eeff;
+    --accent-nova: #ff6b4a;
+    --accent-pulsar: #4af0ff;
+    --accent-nebula: #c77dff;
+    --text-primary: rgba(240, 238, 255, 0.92);
+    --text-secondary: rgba(240, 238, 255, 0.5);
+    --text-ghost: rgba(240, 238, 255, 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--void);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text-primary);
+    cursor: crosshair;
+    user-select: none;
+  }
+
+  canvas#universe {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+  }
+
+  .overlay {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(26, 5, 51, 0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(10, 22, 40, 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(199, 125, 255, 0.05) 0%, transparent 40%);
+  }
+
+  .vignette {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 3;
+    pointer-events: none;
+    box-shadow: inset 0 0 200px 80px rgba(3, 1, 8, 0.7);
+  }
+
+  .scanlines {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 4;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+
+  .supernova-flash {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 5;
+    background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgba(255,255,255,0.9), transparent 40%);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.15s ease-out;
+  }
+  .supernova-flash.bang { opacity: 1; transition: opacity 0s; }
+
+  .ui-layer { position: fixed; z-index: 20; pointer-events: none; }
+
+  .title-group { top: 40px; left: 50px; }
+  .title-group h1 {
+    font-size: 4.5rem; font-weight: 300;
+    letter-spacing: 0.35em; line-height: 1;
+    background: linear-gradient(135deg, var(--star-white), var(--accent-pulsar), var(--accent-nebula));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: titleReveal 2s ease-out forwards;
+    opacity: 0; transform: translateY(20px);
+  }
+  .title-group .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 300;
+    letter-spacing: 0.5em; color: var(--text-secondary);
+    margin-top: 12px;
+    animation: subtitleReveal 2s ease-out 0.6s forwards; opacity: 0;
+  }
+
+  .stats-hud {
+    bottom: 40px; left: 50px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em;
+    color: var(--text-secondary); line-height: 2;
+    animation: fadeIn 2s ease-out 1.2s forwards; opacity: 0;
+  }
+  .stats-hud .label { color: var(--text-ghost); margin-right: 6px; }
+  .stats-hud .value { color: var(--accent-pulsar); font-weight: 400; }
+
+  .controls {
+    bottom: 40px; right: 50px;
+    display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+    animation: fadeIn 2s ease-out 1.5s forwards; opacity: 0;
+  }
+  .control-btn {
+    pointer-events: all;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    background: rgba(240, 238, 255, 0.03);
+    border: 1px solid rgba(240, 238, 255, 0.08);
+    padding: 10px 18px; cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px); text-transform: uppercase;
+  }
+  .control-btn:hover {
+    color: var(--accent-pulsar);
+    border-color: rgba(74, 240, 255, 0.3);
+    background: rgba(74, 240, 255, 0.05);
+    box-shadow: 0 0 30px rgba(74, 240, 255, 0.1);
+    transform: translateX(-4px);
+  }
+  .control-btn.active {
+    color: var(--accent-nova);
+    border-color: rgba(255, 107, 74, 0.4);
+    background: rgba(255, 107, 74, 0.08);
+  }
+
+  .info-panel {
+    top: 50px; right: 50px; text-align: right;
+    animation: fadeIn 2s ease-out 1s forwards; opacity: 0;
+  }
+  .info-panel .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.15em;
+    color: var(--text-ghost); line-height: 2.2;
+  }
+
+  .mode-display {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); z-index: 25;
+    font-size: 1.2rem; font-weight: 300;
+    letter-spacing: 0.5em; color: var(--accent-pulsar);
+    opacity: 0; pointer-events: none; text-transform: uppercase;
+  }
+  .mode-display.show { animation: modeFlash 1.5s ease-out forwards; }
+
+  @keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
+  @keyframes subtitleReveal { to { opacity: 1; } }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes modeFlash {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); filter: blur(10px); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); filter: blur(5px); }
+  }
+
+  @media (max-width: 768px) {
+    .title-group { top: 24px; left: 24px; }
+    .title-group h1 { font-size: 2.2rem; letter-spacing: 0.2em; }
+    .stats-hud { bottom: 24px; left: 24px; }
+    .controls { bottom: 24px; right: 24px; }
+    .info-panel { top: 24px; right: 24px; }
+    .info-panel .hint { font-size: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="universe"></canvas>
+<div class="overlay"></div>
+<div class="vignette"></div>
+<div class="scanlines"></div>
+<div class="supernova-flash" id="supernovaFlash"></div>
+
+<div class="ui-layer title-group">
+  <h1>COSMOS</h1>
+  <div class="subtitle">AN INTERACTIVE UNIVERSE</div>
+</div>
+
+<div class="ui-layer info-panel">
+  <div class="hint">CLICK TO BIRTH STARS</div>
+  <div class="hint">HOLD + DRAG FOR GRAVITY WELLS</div>
+  <div class="hint">SCROLL TO WARP TIME</div>
+  <div class="hint">DOUBLE-CLICK FOR SUPERNOVA</div>
+</div>
+
+<div class="ui-layer stats-hud" id="statsHud">
+  <div><span class="label">BODIES</span><span class="value" id="statBodies">0</span></div>
+  <div><span class="label">ENTROPY</span><span class="value" id="statEntropy">0.00</span></div>
+  <div><span class="label">TIME SCALE</span><span class="value" id="statTime">1.00×</span></div>
+  <div><span class="label">EPOCH</span><span class="value" id="statEpoch">0</span></div>
+</div>
+
+<div class="ui-layer controls">
+  <button class="control-btn active" id="btnNebula" onclick="toggleMode('nebula', this)">NEBULA</button>
+  <button class="control-btn" id="btnOrbit" onclick="toggleMode('orbit', this)">ORBITAL</button>
+  <button class="control-btn" id="btnSwarm" onclick="toggleMode('swarm', this)">SWARM</button>
+  <button class="control-btn" onclick="clearUniverse()">HEAT DEATH</button>
+</div>
+
+<div class="mode-display" id="modeDisplay"></div>
+
+<script>
+const canvas = document.getElementById('universe');
+const ctx = canvas.getContext('2d');
+const flash = document.getElementById('supernovaFlash');
+
+let W, H, dpr;
+let particles = [];
+let bgStars = [];
+let nebulaClouds = [];
+let mouse = { x: 0, y: 0, down: false, dx: 0, dy: 0 };
+let timeScale = 1;
+let epoch = 0;
+let currentMode = 'nebula';
+let gravityWells = [];
+
+const MAX_P = 1000;
+const TRAIL_LEN = 18;
+
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ─── Utilities ───
+function hsl(h, s, l, a = 1) { return `hsla(${h},${s}%,${l}%,${a})`; }
+
+function randStarColor() {
+  const t = [
+    { h: 220, s: 80, l: 82 }, { h: 200, s: 55, l: 88 },
+    { h: 42, s: 90, l: 85 },  { h: 20, s: 95, l: 75 },
+    { h: 355, s: 85, l: 72 }, { h: 270, s: 60, l: 78 },
+    { h: 170, s: 75, l: 76 },
+  ];
+  return t[Math.floor(Math.random() * t.length)];
+}
+
+// ─── Background Stars ───
+function initBgStars() {
+  bgStars = [];
+  for (let i = 0; i < 350; i++) {
+    bgStars.push({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.4 + 0.2,
+      phase: Math.random() * 6.28,
+      speed: Math.random() * 0.015 + 0.005,
+      bright: Math.random() * 0.4 + 0.5
+    });
+  }
+}
+
+// ─── Nebula Clouds ───
+function initNebula() {
+  nebulaClouds = [];
+  for (let i = 0; i < 7; i++) {
+    nebulaClouds.push({
+      x: Math.random() * W, y: Math.random() * H,
+      rx: Math.random() * 300 + 150, ry: Math.random() * 200 + 100,
+      hue: Math.random() * 360,
+      drift: (Math.random() - 0.5) * 0.12,
+      phase: Math.random() * 6.28
+    });
+  }
+}
+
+// ─── Particle System ───
+function spawnParticle(x, y, opts = {}) {
+  if (particles.length >= MAX_P) return null;
+  const c = opts.color || randStarColor();
+  const p = {
+    x, y,
+    vx: opts.vx ?? (Math.random() - 0.5) * 2,
+    vy: opts.vy ?? (Math.random() - 0.5) * 2,
+    r: opts.r ?? Math.random() * 3 + 1,
+    mass: opts.mass ?? Math.random() * 2 + 0.5,
+    color: c, trail: [],
+    life: opts.life ?? 1,
+    decay: opts.decay ?? 0.0002 + Math.random() * 0.0003,
+    pulse: Math.random() * 6.28,
+    pulseSpd: Math.random() * 0.05 + 0.02
+  };
+  particles.push(p);
+  return p;
+}
+
+function burst(x, y, count = 25, energy = 4) {
+  for (let i = 0; i < count; i++) {
+    const a = (i / count) * 6.28 + Math.random() * 0.4;
+    const spd = Math.random() * energy + 1;
+    spawnParticle(x, y, {
+      vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
+      r: Math.random() * 2.5 + 0.5, life: 1,
+      decay: 0.003 + Math.random() * 0.005
+    });
+  }
+}
+
+function supernova(x, y) {
+  flash.style.setProperty('--sx', (x / W * 100) + '%');
+  flash.style.setProperty('--sy', (y / H * 100) + '%');
+  flash.classList.add('bang');
+  setTimeout(() => flash.classList.remove('bang'), 120);
+
+  burst(x, y, 70, 9);
+
+  // Shockwave
+  particles.forEach(p => {
+    const dx = p.x - x, dy = p.y - y;
+    const dist = Math.sqrt(dx * dx + dy * dy) + 1;
+    if (dist < 500) {
+      const f = (500 - dist) / 500 * 14;
+      p.vx += (dx / dist) * f;
+      p.vy += (dy / dist) * f;
+    }
+  });
+
+  nebulaClouds.push({
+    x, y,
+    rx: Math.random() * 130 + 80, ry: Math.random() * 90 + 60,
+    hue: Math.random() * 360,
+    drift: (Math.random() - 0.5) * 0.1, phase: 0
+  });
+}
+
+// ─── Physics ───
+function physics(dt) {
+  const gStr = currentMode === 'orbit' ? 120 : currentMode === 'swarm' ? 50 : 28;
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+
+    // Mouse gravity
+    if (mouse.down) {
+      const dx = mouse.x - p.x, dy = mouse.y - p.y;
+      const d = Math.sqrt(dx * dx + dy * dy) + 10;
+      const f = gStr / d;
+      p.vx += (dx / d) * f * dt;
+      p.vy += (dy / d) * f * dt;
+    }
+
+    // Gravity wells
+    for (const gw of gravityWells) {
+      const dx = gw.x - p.x, dy = gw.y - p.y;
+      const d = Math.sqrt(dx * dx + dy * dy) + 10;
+      p.vx += (dx / d) * (gw.str / d) * dt;
+      p.vy += (dy / d) * (gw.str / d) * dt;
+    }
+
+    // Mode behaviors
+    if (currentMode === 'orbit') {
+      const cx = W / 2, cy = H / 2;
+      const dx = cx - p.x, dy = cy - p.y;
+      const d = Math.sqrt(dx * dx + dy * dy) + 10;
+      p.vx += (dx / d) * 0.18 * dt;
+      p.vy += (dy / d) * 0.18 * dt;
+    }
+
+    if (currentMode === 'swarm') {
+      let ax = 0, ay = 0, cnt = 0;
+      for (let j = 0; j < particles.length; j += 3) {
+        if (i === j) continue;
+        const o = particles[j];
+        const dx = o.x - p.x, dy = o.y - p.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < 12000) {
+          ax += o.vx; ay += o.vy; cnt++;
+          if (d2 < 800) { p.vx -= dx * 0.004; p.vy -= dy * 0.004; }
+        }
+      }
+      if (cnt) { p.vx += (ax / cnt - p.vx) * 0.012; p.vy += (ay / cnt - p.vy) * 0.012; }
+    }
+
+    p.vx *= 0.998; p.vy *= 0.998;
+    const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+    if (spd > 14) { p.vx = (p.vx / spd) * 14; p.vy = (p.vy / spd) * 14; }
+
+    p.x += p.vx * dt * timeScale;
+    p.y += p.vy * dt * timeScale;
+
+    // Wrap
+    if (p.x < -60) p.x = W + 60;
+    if (p.x > W + 60) p.x = -60;
+    if (p.y < -60) p.y = H + 60;
+    if (p.y > H + 60) p.y = -60;
+
+    p.trail.push({ x: p.x, y: p.y });
+    if (p.trail.length > TRAIL_LEN) p.trail.shift();
+
+    p.pulse += p.pulseSpd * timeScale;
+    p.life -= p.decay * timeScale;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  for (let i = gravityWells.length - 1; i >= 0; i--) {
+    gravityWells[i].life -= 0.008;
+    if (gravityWells[i].life <= 0) gravityWells.splice(i, 1);
+  }
+}
+
+// ─── Rendering ───
+function drawBgStars() {
+  for (const s of bgStars) {
+    s.phase += s.speed;
+    const a = (Math.sin(s.phase) * 0.3 + 0.7) * s.bright;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, 6.28);
+    ctx.fillStyle = `rgba(210,215,255,${a * 0.55})`;
+    ctx.fill();
+  }
+}
+
+function drawNebulae() {
+  for (const n of nebulaClouds) {
+    n.phase += 0.002;
+    n.x += n.drift;
+    if (n.x < -400) n.x = W + 400;
+    if (n.x > W + 400) n.x = -400;
+    const a = 0.035 + Math.sin(n.phase) * 0.012;
+    const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.rx);
+    g.addColorStop(0, hsl(n.hue, 55, 38, a));
+    g.addColorStop(0.5, hsl(n.hue + 20, 45, 28, a * 0.4));
+    g.addColorStop(1, 'transparent');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(n.x, n.y, n.rx, n.ry, 0, 0, 6.28);
+    ctx.fill();
+  }
+}
+
+function drawConnections() {
+  const md = 110, md2 = md * md;
+  // Only check a subset for performance
+  const step = particles.length > 400 ? 2 : 1;
+  for (let i = 0; i < particles.length; i += step) {
+    const a = particles[i];
+    for (let j = i + 1; j < particles.length; j += step) {
+      const b = particles[j];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < md2) {
+        const alpha = (1 - Math.sqrt(d2) / md) * 0.1 * Math.min(a.life, b.life);
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = hsl(250, 50, 70, alpha);
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    const { color: c, life, trail } = p;
+    const pr = p.r + Math.sin(p.pulse) * 0.5;
+    const a = Math.min(life, 1);
+
+    // Trail
+    if (trail.length > 2) {
+      ctx.beginPath();
+      ctx.moveTo(trail[0].x, trail[0].y);
+      for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
+      ctx.strokeStyle = hsl(c.h, c.s, c.l, a * 0.12);
+      ctx.lineWidth = pr * 0.5;
+      ctx.stroke();
+    }
+
+    // Glow
+    const gg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pr * 5);
+    gg.addColorStop(0, hsl(c.h, c.s, c.l, a * 0.18));
+    gg.addColorStop(1, 'transparent');
+    ctx.fillStyle = gg;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, pr * 5, 0, 6.28);
+    ctx.fill();
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, pr, 0, 6.28);
+    ctx.fillStyle = hsl(c.h, c.s, Math.min(c.l + 20, 100), a);
+    ctx.fill();
+
+    // Hot center
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, pr * 0.35, 0, 6.28);
+    ctx.fillStyle = `rgba(255,255,255,${a * 0.65})`;
+    ctx.fill();
+  }
+}
+
+function drawGravityWells() {
+  for (const gw of gravityWells) {
+    const a = gw.life * 0.25;
+    for (let i = 0; i < 3; i++) {
+      const r = 25 + i * 18 + Math.sin(epoch * 0.04 + i) * 8;
+      ctx.beginPath();
+      ctx.arc(gw.x, gw.y, r, 0, 6.28);
+      ctx.strokeStyle = hsl(190, 80, 60, a * (1 - i * 0.3));
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  }
+}
+
+function drawMouseAttractor(t) {
+  if (!mouse.down) return;
+  const pr = 14 + Math.sin(t * 0.004) * 5;
+  const g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, pr * 4);
+  g.addColorStop(0, 'rgba(74,240,255,0.25)');
+  g.addColorStop(0.5, 'rgba(74,240,255,0.04)');
+  g.addColorStop(1, 'transparent');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(mouse.x, mouse.y, pr * 4, 0, 6.28);
+  ctx.fill();
+
+  ctx.save();
+  ctx.translate(mouse.x, mouse.y);
+  ctx.rotate(t * 0.002);
+  ctx.beginPath();
+  ctx.arc(0, 0, pr, 0, Math.PI * 1.5);
+  ctx.strokeStyle = 'rgba(74,240,255,0.45)';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  ctx.restore();
+}
+
+// ─── Main Loop ───
+let lastT = 0;
+function loop(time) {
+  const dt = Math.min((time - lastT) / 16, 3);
+  lastT = time;
+  epoch++;
+
+  ctx.clearRect(0, 0, W, H);
+
+  drawBgStars();
+  drawNebulae();
+  drawConnections();
+  drawGravityWells();
+  drawParticles();
+  drawMouseAttractor(time);
+
+  physics(dt);
+
+  // Ambient spawn
+  if (particles.length < 50 && Math.random() < 0.04) {
+    spawnParticle(Math.random() * W, Math.random() * H, {
+      life: 0.85, decay: 0.0004, r: Math.random() * 2 + 0.5
+    });
+  }
+
+  // HUD
+  if (epoch % 8 === 0) {
+    document.getElementById('statBodies').textContent = particles.length;
+    const ent = Math.min(1, particles.reduce((s, p) =>
+      s + Math.sqrt(p.vx * p.vx + p.vy * p.vy), 0) / (particles.length + 1) / 5);
+    document.getElementById('statEntropy').textContent = ent.toFixed(2);
+    document.getElementById('statTime').textContent = timeScale.toFixed(2) + '×';
+    document.getElementById('statEpoch').textContent = epoch;
+  }
+
+  requestAnimationFrame(loop);
+}
+
+// ─── Events ───
+canvas.addEventListener('mousemove', e => {
+  mouse.dx = e.clientX - mouse.x;
+  mouse.dy = e.clientY - mouse.y;
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  if (mouse.down && Math.random() < 0.45) {
+    spawnParticle(mouse.x, mouse.y, {
+      vx: mouse.dx * 0.3 + (Math.random() - 0.5),
+      vy: mouse.dy * 0.3 + (Math.random() - 0.5),
+      r: Math.random() * 2 + 0.7, life: 0.9, decay: 0.004
+    });
+  }
+});
+
+canvas.addEventListener('mousedown', e => { mouse.down = true; mouse.x = e.clientX; mouse.y = e.clientY; });
+canvas.addEventListener('mouseup', e => {
+  mouse.down = false;
+  gravityWells.push({ x: e.clientX, y: e.clientY, str: 55 + Math.random() * 45, life: 1 });
+});
+
+canvas.addEventListener('click', e => { burst(e.clientX, e.clientY, 15 + Math.floor(Math.random() * 10), 3.5); });
+canvas.addEventListener('dblclick', e => { supernova(e.clientX, e.clientY); });
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  timeScale = Math.max(0.05, Math.min(5, timeScale - e.deltaY * 0.001));
+}, { passive: false });
+
+// Touch
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  mouse.down = true; mouse.x = t.clientX; mouse.y = t.clientY;
+  burst(t.clientX, t.clientY, 12, 3);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  mouse.dx = t.clientX - mouse.x; mouse.dy = t.clientY - mouse.y;
+  mouse.x = t.clientX; mouse.y = t.clientY;
+  if (Math.random() < 0.5) spawnParticle(mouse.x, mouse.y, {
+    vx: mouse.dx * 0.2, vy: mouse.dy * 0.2,
+    r: Math.random() * 2 + 0.7, life: 0.8, decay: 0.005
+  });
+}, { passive: false });
+canvas.addEventListener('touchend', () => {
+  mouse.down = false;
+  gravityWells.push({ x: mouse.x, y: mouse.y, str: 65, life: 1 });
+});
+
+// ─── Modes ───
+function toggleMode(mode, btn) {
+  currentMode = mode;
+  document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const d = document.getElementById('modeDisplay');
+  d.textContent = mode.toUpperCase();
+  d.classList.remove('show');
+  void d.offsetWidth;
+  d.classList.add('show');
+}
+
+function clearUniverse() {
+  particles.forEach(p => { p.decay = 0.025; });
+  gravityWells = [];
+  const d = document.getElementById('modeDisplay');
+  d.textContent = 'HEAT DEATH';
+  d.classList.remove('show');
+  void d.offsetWidth;
+  d.classList.add('show');
+}
+
+// ─── Init ───
+initBgStars();
+initNebula();
+for (let i = 0; i < 80; i++) {
+  const angle = Math.random() * 6.28;
+  const dist = Math.random() * 220 + 80;
+  spawnParticle(
+    W / 2 + Math.cos(angle) * dist,
+    H / 2 + Math.sin(angle) * dist,
+    {
+      vx: Math.cos(angle + 1.57) * 1.8,
+      vy: Math.sin(angle + 1.57) * 1.8,
+      life: 0.95, decay: 0.00025,
+      r: Math.random() * 2.5 + 0.8
+    }
+  );
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

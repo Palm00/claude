@@ -1,668 +1,898 @@
 <!DOCTYPE html>
+<!--
+  FIRST 100 — Newcomer Navigator Program website
+  ------------------------------------------------
+  BEFORE YOU PUBLISH, DO THESE THREE THINGS:
+  1. Search this file for "REPLACE-WITH-YOUR-EMAIL" and swap in the address
+     where sign-up form submissions should land. This site uses FormSubmit
+     (formsubmit.co), a free service with no account needed. The FIRST time
+     someone submits the form, FormSubmit will email that address a one-time
+     confirmation link — click it, or every submission after will be silently
+     dropped.
+  2. Search for "REPLACE-WITH-YOUR-PHONE" and "REPLACE-WITH-YOUR-ORG-NAME"
+     and fill in real contact info (it appears in a few places: the top
+     utility bar, the trust section, and the footer).
+  3. Read the trust section (search "trust_headline") and the privacy line
+     on the form. Have someone on your team confirm those statements match
+     your program's actual policies before this goes live.
+
+  Also: the Spanish, Portuguese, Haitian Creole, Chinese, and Vietnamese
+  translations were machine-drafted, not written by native-speaking staff.
+  Have a fluent speaker review them, especially anything touching legal or
+  immigration status, before this is the version families rely on.
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>COSMOS — An Interactive Universe</title>
+<title>First 100 — Newcomer Navigator Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@300;400&display=swap');
+  :root{
+    --navy:#152A4A;
+    --navy-light:#1F3B67;
+    --green:#1B4332;
+    --amber:#E8A33D;
+    --amber-dark:#C4841F;
+    --cream:#F7F5F0;
+    --white:#FFFFFF;
+    --ink:#22293A;
+    --gray:#5B6472;
+    --line:#DFDBD0;
+    --radius:6px;
+    --display:"Archivo", Arial, sans-serif;
+    --body:"Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--white);color:var(--ink);font-family:var(--body);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  h1,h2,h3,h4{font-family:var(--display);margin:0 0 .4em;font-weight:800;letter-spacing:-0.01em;color:var(--navy);}
+  p{margin:0 0 1em;}
+  .container{max-width:1160px;margin:0 auto;padding:0 24px;}
+  .eyebrow{
+    font-family:var(--display);font-size:.76rem;font-weight:700;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--green);margin-bottom:.6em;display:block;
+  }
+  .skip-link{position:absolute;left:-999px;top:0;background:var(--navy);color:var(--white);padding:10px 16px;z-index:300;}
+  .skip-link:focus{left:0;}
+  :focus-visible{outline:3px solid var(--amber);outline-offset:2px;}
+  .btn{
+    display:inline-block;font-family:var(--display);font-weight:700;font-size:.86rem;
+    letter-spacing:.03em;text-transform:uppercase;padding:12px 22px;border-radius:var(--radius);
+    text-decoration:none;cursor:pointer;border:2px solid transparent;
+  }
+  .btn-primary{background:var(--amber);color:var(--navy);}
+  .btn-primary:hover{background:var(--amber-dark);}
+  .btn-outline{background:transparent;color:var(--navy);border-color:var(--navy);}
+  .btn-outline:hover{background:var(--navy);color:var(--white);}
+  .btn-outline-onband{background:transparent;color:var(--white);border-color:rgba(255,255,255,0.7);}
+  .btn-outline-onband:hover{background:var(--white);color:var(--green);}
+  .chev{width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:rotate(45deg);display:inline-block;margin-left:5px;position:relative;top:-2px;}
 
-  :root {
-    --void: #030108;
-    --star-white: #f0eeff;
-    --accent-nova: #ff6b4a;
-    --accent-pulsar: #4af0ff;
-    --accent-nebula: #c77dff;
-    --text-primary: rgba(240, 238, 255, 0.92);
-    --text-secondary: rgba(240, 238, 255, 0.5);
-    --text-ghost: rgba(240, 238, 255, 0.2);
+  /* ---------- Utility bar ---------- */
+  .utility-bar{background:var(--navy);color:#C9D0DE;font-size:.82rem;}
+  .utility-row{display:flex;justify-content:space-between;align-items:center;padding:8px 24px;gap:16px;flex-wrap:wrap;}
+  .utility-contact a{color:var(--white);font-weight:600;text-decoration:none;}
+  .utility-contact a:hover{text-decoration:underline;}
+  .lang-select{position:relative;}
+  .lang-select>button{
+    background:transparent;border:1px solid rgba(255,255,255,0.3);color:var(--white);
+    font-family:var(--body);font-size:.8rem;padding:5px 10px;border-radius:4px;cursor:pointer;
+    display:flex;align-items:center;gap:6px;
   }
+  .lang-menu{
+    list-style:none;margin:6px 0 0;padding:6px;position:absolute;right:0;top:100%;
+    background:var(--white);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.16);
+    min-width:170px;z-index:150;
+  }
+  .lang-menu[hidden]{display:none;}
+  .lang-menu li{margin:0;}
+  .lang-menu button{
+    width:100%;text-align:left;background:none;border:0;padding:8px 10px;border-radius:4px;
+    font-family:var(--body);font-size:.88rem;color:var(--ink);cursor:pointer;
+  }
+  .lang-menu button:hover{background:var(--cream);}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* ---------- Header ---------- */
+  header{position:sticky;top:0;z-index:120;background:var(--white);border-bottom:1px solid var(--line);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;gap:20px;flex-wrap:wrap;}
+  .wordmark{
+    font-family:var(--display);font-weight:800;font-size:1.15rem;letter-spacing:-0.01em;
+    color:var(--navy);text-decoration:none;white-space:nowrap;
+  }
+  .wordmark span{color:var(--green);}
+  nav.main-links{display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
+  nav.main-links>a{
+    font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;
+    text-decoration:none;color:var(--navy);padding:6px 0;border-bottom:2px solid transparent;
+  }
+  nav.main-links>a:hover{border-bottom-color:var(--amber);}
+  .dropdown{position:relative;}
+  .dropdown-toggle{
+    font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;
+    background:none;border:0;color:var(--navy);cursor:pointer;padding:6px 0;display:flex;align-items:center;
+  }
+  .dropdown-panel{
+    list-style:none;margin:10px 0 0;padding:10px;position:absolute;left:0;top:100%;
+    background:var(--white);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 28px rgba(21,42,74,0.14);
+    min-width:230px;z-index:150;
+  }
+  .dropdown-panel[hidden]{display:none;}
+  .dropdown-panel li{margin:0;}
+  .dropdown-panel button{
+    width:100%;text-align:left;background:none;border:0;padding:9px 10px;border-radius:5px;
+    font-family:var(--body);font-weight:600;font-size:.9rem;color:var(--navy);cursor:pointer;
+  }
+  .dropdown-panel button:hover{background:var(--cream);}
+  .nav-ctas{display:flex;gap:10px;flex-wrap:wrap;}
 
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: var(--void);
-    font-family: 'Cormorant Garamond', serif;
-    color: var(--text-primary);
-    cursor: crosshair;
-    user-select: none;
+  /* ---------- Hero ---------- */
+  .hero-band{background:var(--green);color:var(--white);padding:56px 0 96px;}
+  .hero-band .eyebrow{color:#9FCBB0;}
+  .hero-band h1{color:var(--white);font-size:clamp(2rem,4vw,2.9rem);line-height:1.08;max-width:18ch;}
+  .hero-band p.lead{color:#DCE9E1;font-size:1.05rem;max-width:52ch;}
+  .hero-ctas{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
+  .feature-card{
+    background:var(--white);border:1px solid var(--line);border-radius:10px;
+    box-shadow:0 16px 40px rgba(21,42,74,0.12);
+    padding:32px 34px;margin-top:-64px;position:relative;max-width:640px;
   }
+  .feature-card h2{font-size:1.4rem;margin-bottom:.35em;}
+  .feature-card p{color:var(--gray);margin-bottom:.9em;}
+  .feature-card .btn-link{font-family:var(--display);font-weight:700;font-size:.86rem;color:var(--green);text-decoration:none;}
+  .feature-card .btn-link:hover{text-decoration:underline;}
 
-  canvas#universe {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1;
-  }
+  /* ---------- How it works ---------- */
+  .how{padding:76px 0 64px;}
+  .how-head{max-width:60ch;margin-bottom:38px;}
+  .how-head h2{font-size:clamp(1.6rem,2.8vw,2.1rem);}
+  .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;}
+  .step-card{border-top:3px solid var(--navy);padding-top:16px;}
+  .step-num{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--amber-dark);}
+  .step-card h3{font-size:1.05rem;margin:.3em 0 .3em;}
+  .step-card p{font-size:.92rem;color:var(--gray);margin:0;}
 
-  .overlay {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; z-index: 2;
-    pointer-events: none;
-    background:
-      radial-gradient(ellipse at 20% 50%, rgba(26, 5, 51, 0.3) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(10, 22, 40, 0.4) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 80%, rgba(199, 125, 255, 0.05) 0%, transparent 40%);
-  }
+  /* ---------- Quick numbers ---------- */
+  .quicknumbers{background:#FBEFDD;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:32px 0;}
+  .quicknumbers .eyebrow{color:var(--amber-dark);}
+  .quicknumbers h2{font-size:1.15rem;margin-bottom:16px;max-width:62ch;}
+  .qn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
+  .qn-card{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:14px 16px;}
+  .qn-card .qn-num{font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--navy);display:block;}
+  .qn-card .qn-num a{color:inherit;text-decoration:none;}
+  .qn-card .qn-num a:hover{text-decoration:underline;}
+  .qn-card p{font-size:.84rem;color:var(--gray);margin:.25em 0 0;}
 
-  .vignette {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; z-index: 3;
-    pointer-events: none;
-    box-shadow: inset 0 0 200px 80px rgba(3, 1, 8, 0.7);
+  /* ---------- Resources ---------- */
+  .resources{padding:64px 0 80px;background:var(--cream);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .resources-head{max-width:64ch;margin-bottom:12px;}
+  .resources-head h2{font-size:clamp(1.6rem,2.8vw,2.1rem);}
+  .resources-head p{color:var(--gray);}
+  .resources-layout{display:grid;grid-template-columns:230px 1fr;gap:36px;margin-top:32px;align-items:start;}
+  .filters{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:20px;position:sticky;top:96px;}
+  .filters h3{font-size:.95rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px;}
+  .filter-group label{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;margin-bottom:12px;color:var(--ink);cursor:pointer;}
+  .filter-group input{margin-top:3px;}
+  .rgroup{margin-bottom:40px;}
+  .rgroup.is-hidden{display:none;}
+  .rgroup:last-child{margin-bottom:0;}
+  .rgroup-title{font-size:1.15rem;margin-bottom:.3em;}
+  .rgroup-desc{color:var(--gray);font-size:.92rem;max-width:70ch;margin-bottom:.6em;}
+  .rgroup-warning{
+    background:#FDECEC;border:1px solid #E8B4B4;border-left:4px solid #B5413A;border-radius:6px;
+    padding:12px 16px;font-size:.86rem;color:#6B2420;margin-bottom:16px;max-width:70ch;
   }
+  .rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+  .rcard{
+    background:var(--white);border:1px solid var(--line);border-radius:8px;padding:16px 18px;
+  }
+  .rcard h4{font-size:.98rem;margin-bottom:.3em;}
+  .rcard .rmeta{font-size:.85rem;color:var(--ink);margin:0 0 .3em;}
+  .rcard .rnote{font-size:.83rem;color:var(--gray);margin:0;}
 
-  .scanlines {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; z-index: 4;
-    pointer-events: none;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  }
+  /* ---------- Trust ---------- */
+  .trust{background:var(--navy);color:var(--white);padding:52px 0;}
+  .trust-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:36px;align-items:start;}
+  .trust h2{color:var(--white);font-size:clamp(1.4rem,2.4vw,1.9rem);}
+  .trust p{color:#C6CEDD;}
+  .trust-side{border-left:3px solid var(--amber);padding-left:20px;}
+  .trust-side p{color:#C6CEDD;font-size:.86rem;margin-bottom:.4em;}
+  .trust-side .num{font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--white);}
+  .emergency{font-size:.82rem;color:#93A0B8;margin-top:16px;}
 
-  .supernova-flash {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%; z-index: 5;
-    background: radial-gradient(circle at var(--sx, 50%) var(--sy, 50%), rgba(255,255,255,0.9), transparent 40%);
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.15s ease-out;
+  /* ---------- Sign-up ---------- */
+  .signup{padding:76px 0;}
+  .signup-head{max-width:64ch;margin-bottom:30px;}
+  .signup-head h2{font-size:clamp(1.6rem,2.8vw,2.1rem);}
+  .signup-head p{color:var(--gray);}
+  form.intake{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:32px;max-width:720px;}
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-weight:600;font-size:.92rem;margin-bottom:6px;color:var(--navy);}
+  .field input[type="text"], .field input[type="tel"], .field input[type="email"],
+  .field select, .field textarea{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:5px;
+    font-family:var(--body);font-size:.96rem;background:var(--cream);color:var(--ink);
   }
-  .supernova-flash.bang { opacity: 1; transition: opacity 0s; }
+  .field textarea{min-height:88px;resize:vertical;}
+  .checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;}
+  .check-item{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;}
+  .check-item input{margin-top:3px;}
+  .privacy-note{font-size:.82rem;color:var(--gray);margin-top:4px;}
 
-  .ui-layer { position: fixed; z-index: 20; pointer-events: none; }
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:36px 0;background:var(--cream);}
+  footer .foot-grid{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  footer .foot-wordmark{font-family:var(--display);font-weight:800;color:var(--navy);margin-bottom:8px;}
+  footer p{font-size:.84rem;color:var(--gray);margin:0 0 .5em;max-width:60ch;}
 
-  .title-group { top: 40px; left: 50px; }
-  .title-group h1 {
-    font-size: 4.5rem; font-weight: 300;
-    letter-spacing: 0.35em; line-height: 1;
-    background: linear-gradient(135deg, var(--star-white), var(--accent-pulsar), var(--accent-nebula));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    animation: titleReveal 2s ease-out forwards;
-    opacity: 0; transform: translateY(20px);
+  @media (max-width:960px){
+    .hero-band h1{max-width:none;}
+    .steps-grid{grid-template-columns:repeat(2,1fr);row-gap:26px;}
+    .resources-layout{grid-template-columns:1fr;}
+    .filters{position:static;}
+    .trust-grid{grid-template-columns:1fr;}
   }
-  .title-group .subtitle {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; font-weight: 300;
-    letter-spacing: 0.5em; color: var(--text-secondary);
-    margin-top: 12px;
-    animation: subtitleReveal 2s ease-out 0.6s forwards; opacity: 0;
-  }
-
-  .stats-hud {
-    bottom: 40px; left: 50px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; letter-spacing: 0.15em;
-    color: var(--text-secondary); line-height: 2;
-    animation: fadeIn 2s ease-out 1.2s forwards; opacity: 0;
-  }
-  .stats-hud .label { color: var(--text-ghost); margin-right: 6px; }
-  .stats-hud .value { color: var(--accent-pulsar); font-weight: 400; }
-
-  .controls {
-    bottom: 40px; right: 50px;
-    display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
-    animation: fadeIn 2s ease-out 1.5s forwards; opacity: 0;
-  }
-  .control-btn {
-    pointer-events: all;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.2em;
-    color: var(--text-secondary);
-    background: rgba(240, 238, 255, 0.03);
-    border: 1px solid rgba(240, 238, 255, 0.08);
-    padding: 10px 18px; cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    backdrop-filter: blur(10px); text-transform: uppercase;
-  }
-  .control-btn:hover {
-    color: var(--accent-pulsar);
-    border-color: rgba(74, 240, 255, 0.3);
-    background: rgba(74, 240, 255, 0.05);
-    box-shadow: 0 0 30px rgba(74, 240, 255, 0.1);
-    transform: translateX(-4px);
-  }
-  .control-btn.active {
-    color: var(--accent-nova);
-    border-color: rgba(255, 107, 74, 0.4);
-    background: rgba(255, 107, 74, 0.08);
-  }
-
-  .info-panel {
-    top: 50px; right: 50px; text-align: right;
-    animation: fadeIn 2s ease-out 1s forwards; opacity: 0;
-  }
-  .info-panel .hint {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.15em;
-    color: var(--text-ghost); line-height: 2.2;
-  }
-
-  .mode-display {
-    position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); z-index: 25;
-    font-size: 1.2rem; font-weight: 300;
-    letter-spacing: 0.5em; color: var(--accent-pulsar);
-    opacity: 0; pointer-events: none; text-transform: uppercase;
-  }
-  .mode-display.show { animation: modeFlash 1.5s ease-out forwards; }
-
-  @keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
-  @keyframes subtitleReveal { to { opacity: 1; } }
-  @keyframes fadeIn { to { opacity: 1; } }
-  @keyframes modeFlash {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); filter: blur(10px); }
-    20% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); filter: blur(5px); }
-  }
-
-  @media (max-width: 768px) {
-    .title-group { top: 24px; left: 24px; }
-    .title-group h1 { font-size: 2.2rem; letter-spacing: 0.2em; }
-    .stats-hud { bottom: 24px; left: 24px; }
-    .controls { bottom: 24px; right: 24px; }
-    .info-panel { top: 24px; right: 24px; }
-    .info-panel .hint { font-size: 0.5rem; }
+  @media (max-width:640px){
+    nav.main-links{order:3;width:100%;justify-content:flex-start;gap:18px;}
+    .steps-grid{grid-template-columns:1fr;}
+    .feature-card{padding:24px;}
   }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<canvas id="universe"></canvas>
-<div class="overlay"></div>
-<div class="vignette"></div>
-<div class="scanlines"></div>
-<div class="supernova-flash" id="supernovaFlash"></div>
-
-<div class="ui-layer title-group">
-  <h1>COSMOS</h1>
-  <div class="subtitle">AN INTERACTIVE UNIVERSE</div>
+<div class="utility-bar">
+  <div class="container utility-row">
+    <div class="utility-contact"><span data-i18n="call_label">Call us:</span> <a href="tel:REPLACE-WITH-YOUR-PHONE">REPLACE-WITH-YOUR-PHONE</a></div>
+    <div class="lang-select">
+      <button type="button" id="langToggle" aria-haspopup="true" aria-expanded="false">
+        <span id="langCurrent">English</span><span class="chev"></span>
+      </button>
+      <ul class="lang-menu" id="langMenu" hidden>
+        <li><button type="button" data-lang="en">English</button></li>
+        <li><button type="button" data-lang="es">Español</button></li>
+        <li><button type="button" data-lang="pt">Português</button></li>
+        <li><button type="button" data-lang="ht">Kreyòl Ayisyen</button></li>
+        <li><button type="button" data-lang="zh">中文</button></li>
+        <li><button type="button" data-lang="vi">Tiếng Việt</button></li>
+      </ul>
+    </div>
+  </div>
 </div>
 
-<div class="ui-layer info-panel">
-  <div class="hint">CLICK TO BIRTH STARS</div>
-  <div class="hint">HOLD + DRAG FOR GRAVITY WELLS</div>
-  <div class="hint">SCROLL TO WARP TIME</div>
-  <div class="hint">DOUBLE-CLICK FOR SUPERNOVA</div>
-</div>
+<header>
+  <div class="nav-row container">
+    <a class="wordmark" href="#top">FIRST <span>100</span></a>
+    <nav class="main-links" aria-label="Primary">
+      <a href="#how" data-i18n="nav_how">How It Works</a>
+      <div class="dropdown">
+        <button type="button" class="dropdown-toggle" id="resToggle" aria-haspopup="true" aria-expanded="false">
+          <span data-i18n="nav_resources">Resources</span><span class="chev"></span>
+        </button>
+        <ul class="dropdown-panel" id="resPanel" hidden>
+          <li><button type="button" data-filter="legal" data-i18n="line_legal_name">Legal &amp; Immigration</button></li>
+          <li><button type="button" data-filter="ids" data-i18n="line_ids_name">Driver's License, ID &amp; Transit</button></li>
+          <li><button type="button" data-filter="school" data-i18n="line_school_name">School Enrollment</button></li>
+          <li><button type="button" data-filter="english" data-i18n="line_english_name">English Classes</button></li>
+          <li><button type="button" data-filter="health" data-i18n="line_health_name">Healthcare</button></li>
+          <li><button type="button" data-filter="work" data-i18n="line_work_name">Employment &amp; Transportation</button></li>
+          <li><button type="button" data-filter="community" data-i18n="line_community_name">Community &amp; Cultural Organizations</button></li>
+          <li><button type="button" data-filter="all">All Resources</button></li>
+        </ul>
+      </div>
+      <a href="#signup" data-i18n="nav_signup">Sign Up</a>
+    </nav>
+    <div class="nav-ctas">
+      <a class="btn btn-outline" href="#trust" data-i18n="promise_label">Our Promise</a>
+      <a class="btn btn-primary" href="#signup" data-i18n="nav_cta">Get a Navigator</a>
+    </div>
+  </div>
+</header>
 
-<div class="ui-layer stats-hud" id="statsHud">
-  <div><span class="label">BODIES</span><span class="value" id="statBodies">0</span></div>
-  <div><span class="label">ENTROPY</span><span class="value" id="statEntropy">0.00</span></div>
-  <div><span class="label">TIME SCALE</span><span class="value" id="statTime">1.00×</span></div>
-  <div><span class="label">EPOCH</span><span class="value" id="statEpoch">0</span></div>
-</div>
+<main id="main">
 
-<div class="ui-layer controls">
-  <button class="control-btn active" id="btnNebula" onclick="toggleMode('nebula', this)">NEBULA</button>
-  <button class="control-btn" id="btnOrbit" onclick="toggleMode('orbit', this)">ORBITAL</button>
-  <button class="control-btn" id="btnSwarm" onclick="toggleMode('swarm', this)">SWARM</button>
-  <button class="control-btn" onclick="clearUniverse()">HEAT DEATH</button>
-</div>
+  <!-- HERO -->
+  <section id="top">
+    <div class="hero-band">
+      <div class="container">
+        <p class="eyebrow" data-i18n="hero_eyebrow">A NEWCOMER SUPPORT PROGRAM · GREATER BOSTON</p>
+        <h1 data-i18n="hero_headline">Your first 100 days, mapped.</h1>
+        <p class="lead" data-i18n="hero_sub">First 100 pairs newly arrived families with trained student navigators who help you find real, free resources — in your language — from day one.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#signup" data-i18n="hero_cta_primary">Get a Navigator</a>
+          <a class="btn btn-outline-onband" href="#resources" data-i18n="hero_cta_secondary">See Resources</a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="feature-card">
+        <p class="eyebrow" data-i18n="how_eyebrow">HOW IT WORKS</p>
+        <h2 data-i18n="feature_headline">From your first hello to your hundredth day</h2>
+        <p data-i18n="feature_body">Every family gets a trained navigator, a plan built around your needs, and check-ins that continue through your first 100 days in Massachusetts.</p>
+        <a class="btn-link" href="#how" data-i18n="feature_link">See the four steps →</a>
+      </div>
+    </div>
+  </section>
 
-<div class="mode-display" id="modeDisplay"></div>
+  <!-- QUICK NUMBERS -->
+  <section class="quicknumbers" id="quicknumbers">
+    <div class="container">
+      <p class="eyebrow" data-i18n="quicknumbers_eyebrow">NEED HELP RIGHT NOW?</p>
+      <h2 data-i18n="quicknumbers_headline">These lines are free, confidential, and answer in many languages.</h2>
+      <div class="qn-grid">
+        <div class="qn-card">
+          <span class="qn-num"><a href="tel:211">211</a></span>
+          <p data-i18n="qn_211_label">Food, housing, or any urgent need</p>
+        </div>
+        <div class="qn-card">
+          <span class="qn-num"><a href="tel:988">988</a></span>
+          <p data-i18n="qn_988_label">Mental health crisis, any time</p>
+        </div>
+        <div class="qn-card">
+          <span class="qn-num"><a href="tel:8337732445">833-773-2445</a></span>
+          <p data-i18n="qn_bhhl_label">Free mental health guidance, no insurance needed</p>
+        </div>
+        <div class="qn-card">
+          <span class="qn-num"><a href="tel:8573689362">857-368-9362</a></span>
+          <p data-i18n="qn_wfma_label">Help applying for a driver's license — any immigration status</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="how-head">
+        <p class="eyebrow" data-i18n="how_eyebrow">HOW IT WORKS</p>
+        <h2 data-i18n="how_headline">Four steps to get connected.</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3 data-i18n="how_step1_title">Reach out</h3>
+          <p data-i18n="how_step1_desc">Call, text, or fill out the form. Tell us the language you're most comfortable in.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3 data-i18n="how_step2_title">Get matched</h3>
+          <p data-i18n="how_step2_desc">We pair you with a trained student navigator who speaks your language or works with an interpreter.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3 data-i18n="how_step3_title">Get connected</h3>
+          <p data-i18n="how_step3_desc">Your navigator helps you reach real local resources — legal aid, schools, English classes, healthcare, and more.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h3 data-i18n="how_step4_title">Stay supported</h3>
+          <p data-i18n="how_step4_desc">Your navigator checks in through your first 100 days, adjusting the plan as things come up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="resources" id="resources">
+    <div class="container">
+      <div class="resources-head">
+        <p class="eyebrow" data-i18n="resources_eyebrow">WHAT WE HELP WITH</p>
+        <h2 data-i18n="resources_headline_alt">Resource Library</h2>
+        <p data-i18n="resources_sub">Every organization below is free or low-cost. You don't need to sign up for First 100 to use them — but your navigator can help you get there.</p>
+      </div>
+
+      <div class="resources-layout">
+        <aside class="filters">
+          <h3 data-i18n="filter_label">Filter By</h3>
+          <div class="filter-group" id="filterGroup">
+            <label><input type="checkbox" class="filter-cb" value="legal" checked><span data-i18n="line_legal_name">Legal &amp; Immigration</span></label>
+            <label><input type="checkbox" class="filter-cb" value="ids" checked><span data-i18n="line_ids_name">Driver's License, ID &amp; Transit</span></label>
+            <label><input type="checkbox" class="filter-cb" value="school" checked><span data-i18n="line_school_name">School Enrollment</span></label>
+            <label><input type="checkbox" class="filter-cb" value="english" checked><span data-i18n="line_english_name">English Classes</span></label>
+            <label><input type="checkbox" class="filter-cb" value="health" checked><span data-i18n="line_health_name">Healthcare</span></label>
+            <label><input type="checkbox" class="filter-cb" value="work" checked><span data-i18n="line_work_name">Employment &amp; Transportation</span></label>
+            <label><input type="checkbox" class="filter-cb" value="community" checked><span data-i18n="line_community_name">Community &amp; Cultural Organizations</span></label>
+          </div>
+        </aside>
+
+        <div class="resource-groups" id="resourceGroups">
+
+          <!-- LEGAL -->
+          <div class="rgroup" data-cat="legal">
+            <h3 class="rgroup-title" data-i18n="line_legal_name">Legal &amp; Immigration</h3>
+            <p class="rgroup-desc" data-i18n="line_legal_desc">Free help with paperwork, know-your-rights info, and court support. None of these charge by the hour.</p>
+            <div class="rgroup-warning" data-i18n="notario_warning">Warning: in the U.S., a "notario" or "notario público" is NOT a lawyer and cannot give legal advice, sign your forms, or represent you in court — even if that's what the title means in your home country. Always confirm you're speaking with a licensed attorney or a DOJ-accredited representative before paying anyone for immigration help.</div>
+            <div class="rcards">
+              <article class="rcard"><h4>Mayor's Office for Immigrant Advancement</h4><p class="rmeta">1 City Hall Sq, Boston · 617-635-2980</p><p class="rnote">Free consults w/ volunteer lawyers · 1st &amp; 3rd Wed, 12–3pm · interpretation available</p></article>
+              <article class="rcard"><h4>MIRA Coalition Helpline</h4><p class="rmeta">69 Canal St, Boston · 617-350-5480</p><p class="rnote">General immigration info &amp; referrals (not legal advice)</p></article>
+              <article class="rcard"><h4>PAIR Project</h4><p class="rmeta">98 N Washington St, Boston · 617-742-9296</p><p class="rnote">Free legal help for asylum seekers</p></article>
+              <article class="rcard"><h4>Project Citizenship</h4><p class="rmeta">617-694-5949</p><p class="rnote">Free citizenship applications &amp; workshops · Arabic, French, Haitian Creole, Spanish</p></article>
+              <article class="rcard"><h4>Greater Boston Legal Services</h4><p class="rmeta">617-884-9909</p><p class="rnote">Free civil legal aid — covers Boston, Everett, Malden &amp; 30+ nearby cities</p></article>
+              <article class="rcard"><h4>Northeastern Immigrant Justice Clinic</h4><p class="rmeta">416 Huntington Ave, Boston · 617-373-6802</p><p class="rnote">Free legal help from law students supervised by licensed attorneys</p></article>
+              <article class="rcard"><h4>La Comunidad, Inc.</h4><p class="rmeta">471 Broadway, Everett · 617-387-9996</p><p class="rnote">Immigration help, ITIN applications, Spanish/Portuguese document translation</p></article>
+              <article class="rcard"><h4>Centro Comunitario Scalabrini</h4><p class="rmeta">63 Oakes St, Everett · 617-387-1393</p><p class="rnote">Free services for all immigrants, document guidance &amp; legal referrals</p></article>
+              <article class="rcard"><h4>MassLegalHelp Resource Finder</h4><p class="rmeta">masslegalhelp.org</p><p class="rnote">Enter your zip code to find free/low-cost legal help nearby</p></article>
+            </div>
+          </div>
+
+          <!-- IDS -->
+          <div class="rgroup" data-cat="ids">
+            <h3 class="rgroup-title" data-i18n="line_ids_name">Driver's License, ID &amp; Transit</h3>
+            <p class="rgroup-desc" data-i18n="line_ids_desc">Massachusetts lets any resident apply for a standard driver's license, no matter their immigration status — and by law, the RMV cannot share your information with immigration authorities.</p>
+            <div class="rcards">
+              <article class="rcard"><h4>Work &amp; Family Mobility Act Helpline</h4><p class="rmeta">857-368-9362</p><p class="rnote">Help applying for a standard MA license · Spanish, Portuguese, Mandarin, Haitian Creole, Vietnamese</p></article>
+              <article class="rcard"><h4>MA RMV — Work &amp; Family Mobility Act</h4><p class="rmeta">mass.gov/WFMA</p><p class="rnote">Official document checklist &amp; appointment booking — proof of status is not required</p></article>
+              <article class="rcard"><h4>MBTA Reduced Fares &amp; CharlieCard</h4><p class="rmeta">mbta.com</p><p class="rnote">Discounted bus &amp; subway fares for eligible riders</p></article>
+              <article class="rcard"><h4>Transportation stipends</h4><p class="rmeta">Ask your navigator</p><p class="rnote">Several English &amp; employment programs below include a monthly T-pass or gas stipend</p></article>
+            </div>
+          </div>
+
+          <!-- SCHOOL -->
+          <div class="rgroup" data-cat="school">
+            <h3 class="rgroup-title" data-i18n="line_school_name">School Enrollment</h3>
+            <p class="rgroup-desc" data-i18n="line_school_desc">Every child can enroll in Massachusetts public school, regardless of immigration status. No Social Security number required.</p>
+            <p class="rgroup-desc" data-i18n="school_note" style="margin-top:-8px">Malden students get free breakfast and lunch automatically — no paperwork needed.</p>
+            <div class="rcards">
+              <article class="rcard"><h4>Malden Public Schools Welcome Center</h4><p class="rmeta">781-397-7271</p><p class="rnote">Start here for K-12 registration — helps with proof of residency, birth record &amp; immunization requirements</p></article>
+              <article class="rcard"><h4>MA Dept. of Elementary &amp; Secondary Education</h4><p class="rmeta">el@doe.mass.edu</p><p class="rnote">Newcomer &amp; refugee student enrollment guidance</p></article>
+              <article class="rcard"><h4>Refugee School Impact Program</h4><p class="rmeta">via Mass.gov</p><p class="rnote">Helps districts support refugee children &amp; families</p></article>
+              <article class="rcard"><h4>Your local school district Welcome Center</h4><p class="rmeta">Ask your navigator to help find yours</p><p class="rnote">Outside Malden? Most MA districts have a dedicated newcomer intake office</p></article>
+            </div>
+          </div>
+
+          <!-- ENGLISH -->
+          <div class="rgroup" data-cat="english">
+            <h3 class="rgroup-title" data-i18n="line_english_name">English Classes</h3>
+            <p class="rgroup-desc" data-i18n="line_english_desc">Free ESOL classes across Greater Boston, all levels, some with childcare or evening hours.</p>
+            <div class="rcards">
+              <article class="rcard"><h4>The Immigrant Learning Center</h4><p class="rmeta">442 Main St, Malden · 781-322-9777</p><p class="rnote">Free ESOL, all levels, plus citizenship prep</p></article>
+              <article class="rcard"><h4>Malden Public Library — English Conversation</h4><p class="rmeta">36 Salem St, Malden · 781-324-0218</p><p class="rnote">Free drop-in conversation class, Wednesdays 1:00–2:30pm</p></article>
+              <article class="rcard"><h4>MassLINKS Virtual Academy</h4><p class="rmeta">masslinks.org</p><p class="rnote">Free, fully online ESOL + GED/HiSET — good if childcare or work hours make in-person hard</p></article>
+              <article class="rcard"><h4>JVS Boston — English 2 Employment</h4><p class="rmeta">jvs-boston.org</p><p class="rnote">Free English + job coaching, transportation help available</p></article>
+              <article class="rcard"><h4>International Institute of New England</h4><p class="rmeta">1 Milk St, Boston · 617-695-9990</p><p class="rnote">Free ESOL &amp; citizenship classes</p></article>
+              <article class="rcard"><h4>Catholic Charities Boston ESOL</h4><p class="rmeta">275 W Broadway, South Boston · 617-464-8100</p><p class="rnote">Free classes, day &amp; evening</p></article>
+              <article class="rcard"><h4>La Comunidad, Inc.</h4><p class="rmeta">471 Broadway, Everett · 617-387-9996</p><p class="rnote">Citizenship &amp; ESL classes</p></article>
+            </div>
+          </div>
+
+          <!-- HEALTH -->
+          <div class="rgroup" data-cat="health">
+            <h3 class="rgroup-title" data-i18n="line_health_name">Healthcare</h3>
+            <p class="rgroup-desc" data-i18n="line_health_desc">No insurance, SSN, or immigration documents needed to be seen at a community health center. Many immigrants qualify for MassHealth regardless of status.</p>
+            <div class="rcards">
+              <article class="rcard"><h4>BMC Immigrant &amp; Refugee Health Center</h4><p class="rmeta">Boston Medical Center</p><p class="rnote">Single entry point for immigrant/refugee care, incl. mental health</p></article>
+              <article class="rcard"><h4>MassHealth</h4><p class="rmeta">mass.gov/masshealth</p><p class="rnote">Free/low-cost coverage — many immigrants qualify regardless of status</p></article>
+              <article class="rcard"><h4>Joint Committee for Children's Health Care</h4><p class="rmeta">Everett City Hall, Rm 2 · 617-394-2414</p><p class="rnote">Free help enrolling in health insurance, all ages</p></article>
+              <article class="rcard"><h4>Health Care for All Helpline</h4><p class="rmeta">800-272-4232</p><p class="rnote">Info on free-care programs at MA hospitals, any status</p></article>
+              <article class="rcard"><h4>Eliot Community Human Services</h4><p class="rmeta">548 Broadway, Everett · 781-388-6200</p><p class="rnote">Behavioral health clinics — serves Everett, Malden &amp; Medford</p></article>
+              <article class="rcard"><h4>MA Behavioral Health Helpline</h4><p class="rmeta">833-773-2445</p><p class="rnote">Free, 24/7 clinical guidance &amp; referrals — no insurance required</p></article>
+              <article class="rcard"><h4>Project RISE (Everett Haitian Community Center)</h4><p class="rmeta">857-399-5375</p><p class="rnote">Non-clinical emotional wellness support — focused on Haitian community, open to all</p></article>
+              <article class="rcard"><h4>HRSA Health Center Finder</h4><p class="rmeta">findahealthcenter.hrsa.gov</p><p class="rnote">Locate your nearest sliding-scale health center</p></article>
+            </div>
+          </div>
+
+          <!-- WORK -->
+          <div class="rgroup" data-cat="work">
+            <h3 class="rgroup-title" data-i18n="line_work_name">Employment &amp; Transportation</h3>
+            <p class="rgroup-desc" data-i18n="line_work_desc">Free job training, English-plus-work programs, and help covering the cost of getting there.</p>
+            <div class="rcards">
+              <article class="rcard"><h4>JVS Boston Employment Services</h4><p class="rmeta">617-399-3271</p><p class="rnote">Career coaching, job search help, some transportation stipends</p></article>
+              <article class="rcard"><h4>International Institute of New England</h4><p class="rmeta">iine.org</p><p class="rnote">Skills training + job placement help</p></article>
+              <article class="rcard"><h4>Refugee &amp; Immigrant Assistance Center (RIAC)</h4><p class="rmeta">31 Heath St, Jamaica Plain · 617-522-8500</p><p class="rnote">Employment matching</p></article>
+              <article class="rcard"><h4>Opening a bank account without an SSN</h4><p class="rmeta">Ask La Comunidad about an ITIN first</p><p class="rnote">Bank of America, Chase, Wells Fargo &amp; Citizens accept an ITIN or foreign passport instead</p></article>
+              <article class="rcard"><h4>DTA — Cash &amp; food assistance</h4><p class="rmeta">mass.gov/dta</p><p class="rnote">SNAP &amp; cash assistance — safe to apply for an eligible child even if a parent isn't eligible</p></article>
+            </div>
+          </div>
+
+          <!-- COMMUNITY -->
+          <div class="rgroup" data-cat="community">
+            <h3 class="rgroup-title" data-i18n="line_community_name">Community &amp; Cultural Organizations</h3>
+            <p class="rgroup-desc" data-i18n="line_community_desc">Sometimes the fastest help comes from a group that already knows your language and community.</p>
+            <div class="rcards">
+              <article class="rcard"><h4>Everett Haitian Community Center</h4><p class="rmeta">427A Broadway, Everett · 857-399-5375</p><p class="rnote">Immigration help, insurance enrollment, housing applications, mental health</p></article>
+              <article class="rcard"><h4>La Comunidad, Inc.</h4><p class="rmeta">471 Broadway, Everett · 617-387-9996</p><p class="rnote">Latino community services — immigration, taxes, translation</p></article>
+              <article class="rcard"><h4>LUMA — Latinos Unidos en Massachusetts</h4><p class="rmeta">198 Ferry St, Everett · 617-381-0015</p><p class="rnote">Community navigation &amp; civic participation for the Latin American community</p></article>
+              <article class="rcard"><h4>Centro Comunitario Scalabrini</h4><p class="rmeta">63 Oakes St, Everett · 617-387-1393</p><p class="rnote">Faith-based, free services for all immigrants</p></article>
+              <article class="rcard"><h4>Refugee Immigration Ministry</h4><p class="rmeta">6 Pleasant St, Suite 612, Malden · 781-322-1011</p><p class="rnote">Employment, education &amp; community support for refugees</p></article>
+              <article class="rcard"><h4>Immigrant Family Services Institute</h4><p class="rmeta">Mattapan · 617-322-1348</p><p class="rnote">Home visits, mental health counseling, individual service plans</p></article>
+              <article class="rcard"><h4>Brazilian Worker Center</h4><p class="rmeta">617-783-8001</p><p class="rnote">Workplace rights + Family Welcome Center for emergency housing</p></article>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust" id="trust">
+    <div class="container trust-grid">
+      <div>
+        <p class="eyebrow" style="color:#9FB4D6">OUR PROMISE</p>
+        <h2 data-i18n="trust_headline">You don't have to explain your status to get help.</h2>
+        <p data-i18n="trust_body">Navigators are trained volunteers, not immigration officials. This program does not ask for or require proof of immigration status. If you're ever unsure about a call, link, or organization, ask your navigator first.</p>
+        <p class="emergency">In an emergency, always call 911.</p>
+      </div>
+      <div class="trust-side">
+        <p data-i18n="trust_phone_cta">Prefer to talk? Call or text us:</p>
+        <div class="num">REPLACE-WITH-YOUR-PHONE</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGN UP -->
+  <section class="signup" id="signup">
+    <div class="container">
+      <div class="signup-head">
+        <p class="eyebrow" data-i18n="signup_eyebrow">GET STARTED</p>
+        <h2 data-i18n="signup_headline">Tell us a little about you.</h2>
+        <p data-i18n="signup_sub">We'll match you with a navigator within a few days. No document uploads, no status questions — just how to reach you and what you need.</p>
+      </div>
+
+      <form class="intake" action="https://formsubmit.co/REPLACE-WITH-YOUR-EMAIL" method="POST">
+        <input type="hidden" name="_subject" value="New First 100 sign-up">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_honey" style="display:none">
+
+        <div class="field">
+          <label for="f-name" data-i18n="form_name">Your name</label>
+          <input type="text" id="f-name" name="Name" required>
+        </div>
+
+        <div class="field">
+          <label for="f-contact" data-i18n="form_contact">Phone or email (best way to reach you)</label>
+          <input type="text" id="f-contact" name="Contact" required>
+        </div>
+
+        <div class="field">
+          <label for="f-lang" data-i18n="form_language">Language you're most comfortable in</label>
+          <select id="f-lang" name="Preferred language">
+            <option>English</option>
+            <option>Español</option>
+            <option>Português</option>
+            <option>Kreyòl Ayisyen</option>
+            <option>中文</option>
+            <option>Tiếng Việt</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-zip" data-i18n="form_neighborhood">Neighborhood or zip code (optional)</label>
+          <input type="text" id="f-zip" name="Neighborhood">
+        </div>
+
+        <div class="field">
+          <label data-i18n="form_needs">What do you need help with? (check all that apply)</label>
+          <div class="checks">
+            <label class="check-item"><input type="checkbox" name="Needs" value="Legal & Immigration"><span data-i18n="line_legal_name">Legal &amp; Immigration</span></label>
+            <label class="check-item"><input type="checkbox" name="Needs" value="School Enrollment"><span data-i18n="line_school_name">School Enrollment</span></label>
+            <label class="check-item"><input type="checkbox" name="Needs" value="English Classes"><span data-i18n="line_english_name">English Classes</span></label>
+            <label class="check-item"><input type="checkbox" name="Needs" value="Healthcare"><span data-i18n="line_health_name">Healthcare</span></label>
+            <label class="check-item"><input type="checkbox" name="Needs" value="Employment & Transportation"><span data-i18n="line_work_name">Employment &amp; Transportation</span></label>
+            <label class="check-item"><input type="checkbox" name="Needs" value="Something else"><span data-i18n="form_need_other">Something else</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-msg" data-i18n="form_message">Anything else you'd like us to know? (optional)</label>
+          <textarea id="f-msg" name="Message"></textarea>
+        </div>
+
+        <p class="privacy-note" data-i18n="form_privacy">We only use this to match you with a navigator. We never sell or share your information.</p>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit" data-i18n="form_submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container foot-grid">
+    <div>
+      <div class="foot-wordmark">FIRST 100</div>
+      <p data-i18n="footer_disclaimer">First 100 is a volunteer navigator program. We are not a law firm and do not provide legal advice or immigration representation.</p>
+      <p data-i18n="footer_languages">This site is offered in English, Español, Português, Kreyòl Ayisyen, 中文, and Tiếng Việt.</p>
+    </div>
+    <div>
+      <p>REPLACE-WITH-YOUR-ORG-NAME<br>REPLACE-WITH-YOUR-PHONE<br>REPLACE-WITH-YOUR-EMAIL</p>
+    </div>
+  </div>
+</footer>
 
 <script>
-const canvas = document.getElementById('universe');
-const ctx = canvas.getContext('2d');
-const flash = document.getElementById('supernovaFlash');
-
-let W, H, dpr;
-let particles = [];
-let bgStars = [];
-let nebulaClouds = [];
-let mouse = { x: 0, y: 0, down: false, dx: 0, dy: 0 };
-let timeScale = 1;
-let epoch = 0;
-let currentMode = 'nebula';
-let gravityWells = [];
-
-const MAX_P = 1000;
-const TRAIL_LEN = 18;
-
-function resize() {
-  dpr = Math.min(window.devicePixelRatio || 1, 2);
-  W = window.innerWidth;
-  H = window.innerHeight;
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
-window.addEventListener('resize', resize);
-resize();
-
-// ─── Utilities ───
-function hsl(h, s, l, a = 1) { return `hsla(${h},${s}%,${l}%,${a})`; }
-
-function randStarColor() {
-  const t = [
-    { h: 220, s: 80, l: 82 }, { h: 200, s: 55, l: 88 },
-    { h: 42, s: 90, l: 85 },  { h: 20, s: 95, l: 75 },
-    { h: 355, s: 85, l: 72 }, { h: 270, s: 60, l: 78 },
-    { h: 170, s: 75, l: 76 },
-  ];
-  return t[Math.floor(Math.random() * t.length)];
-}
-
-// ─── Background Stars ───
-function initBgStars() {
-  bgStars = [];
-  for (let i = 0; i < 350; i++) {
-    bgStars.push({
-      x: Math.random() * W, y: Math.random() * H,
-      r: Math.random() * 1.4 + 0.2,
-      phase: Math.random() * 6.28,
-      speed: Math.random() * 0.015 + 0.005,
-      bright: Math.random() * 0.4 + 0.5
-    });
-  }
-}
-
-// ─── Nebula Clouds ───
-function initNebula() {
-  nebulaClouds = [];
-  for (let i = 0; i < 7; i++) {
-    nebulaClouds.push({
-      x: Math.random() * W, y: Math.random() * H,
-      rx: Math.random() * 300 + 150, ry: Math.random() * 200 + 100,
-      hue: Math.random() * 360,
-      drift: (Math.random() - 0.5) * 0.12,
-      phase: Math.random() * 6.28
-    });
-  }
-}
-
-// ─── Particle System ───
-function spawnParticle(x, y, opts = {}) {
-  if (particles.length >= MAX_P) return null;
-  const c = opts.color || randStarColor();
-  const p = {
-    x, y,
-    vx: opts.vx ?? (Math.random() - 0.5) * 2,
-    vy: opts.vy ?? (Math.random() - 0.5) * 2,
-    r: opts.r ?? Math.random() * 3 + 1,
-    mass: opts.mass ?? Math.random() * 2 + 0.5,
-    color: c, trail: [],
-    life: opts.life ?? 1,
-    decay: opts.decay ?? 0.0002 + Math.random() * 0.0003,
-    pulse: Math.random() * 6.28,
-    pulseSpd: Math.random() * 0.05 + 0.02
+(function(){
+  var translations = {
+    es: {
+      nav_how:"Cómo Funciona", nav_resources:"Recursos", nav_signup:"Inscribirse", nav_cta:"Consigue un Navegador",
+      call_label:"Llámanos:", promise_label:"Nuestro Compromiso", filter_label:"Filtrar por",
+      hero_eyebrow:"UN PROGRAMA DE APOYO PARA RECIÉN LLEGADOS · ÁREA DE BOSTON",
+      hero_headline:"Tus primeros 100 días, con un mapa.",
+      hero_sub:"First 100 conecta a familias recién llegadas con navegadores estudiantiles capacitados que te ayudan a encontrar recursos reales y gratuitos, en tu idioma, desde el primer día.",
+      hero_cta_primary:"Consigue un Navegador", hero_cta_secondary:"Ver Recursos",
+      feature_headline:"Desde tu primer saludo hasta tu día número 100",
+      feature_body:"Cada familia recibe un navegador capacitado, un plan hecho a su medida, y seguimiento continuo durante sus primeros 100 días en Massachusetts.",
+      feature_link:"Ver los cuatro pasos →",
+      how_eyebrow:"CÓMO FUNCIONA", how_headline:"Cuatro pasos para conectarte.",
+      how_step1_title:"Comunícate", how_step1_desc:"Llama, envía un mensaje o completa el formulario. Dinos en qué idioma te sientes más cómodo/a.",
+      how_step2_title:"Te conectamos", how_step2_desc:"Te emparejamos con un navegador estudiantil capacitado que habla tu idioma o trabaja con un intérprete.",
+      how_step3_title:"Te conectas con recursos", how_step3_desc:"Tu navegador te ayuda a llegar a recursos locales reales: ayuda legal, escuelas, clases de inglés, salud y más.",
+      how_step4_title:"Sigues recibiendo apoyo", how_step4_desc:"Tu navegador se comunica contigo durante tus primeros 100 días, ajustando el plan según sea necesario.",
+      resources_eyebrow:"EN QUÉ AYUDAMOS", resources_headline_alt:"Biblioteca de Recursos",
+      resources_sub:"Cada organización a continuación es gratuita o de bajo costo. No necesitas inscribirte en First 100 para usarlas, pero tu navegador puede ayudarte a llegar.",
+      quicknumbers_eyebrow:"¿NECESITAS AYUDA AHORA MISMO?", quicknumbers_headline:"Estas líneas son gratuitas, confidenciales y responden en varios idiomas.",
+      qn_211_label:"Comida, vivienda o cualquier necesidad urgente", qn_988_label:"Crisis de salud mental, a cualquier hora",
+      qn_bhhl_label:"Orientación gratuita de salud mental, sin necesidad de seguro", qn_wfma_label:"Ayuda para solicitar una licencia de conducir — cualquier estatus migratorio",
+      line_legal_name:"Legal e Inmigración", line_legal_desc:"Ayuda gratuita con trámites, información sobre tus derechos y apoyo en la corte. Ninguna de estas organizaciones cobra por hora.",
+      notario_warning:"Advertencia: en Estados Unidos, un \"notario\" o \"notario público\" NO es un abogado y no puede darte asesoría legal, firmar tus formularios ni representarte en la corte — aunque eso signifique otra cosa en tu país de origen. Siempre confirma que estás hablando con un abogado con licencia o un representante acreditado por el DOJ antes de pagarle a alguien por ayuda migratoria.",
+      line_ids_name:"Licencia de Conducir, ID y Transporte", line_ids_desc:"Massachusetts permite que cualquier residente solicite una licencia de conducir estándar, sin importar su estatus migratorio — y por ley, el RMV no puede compartir tu información con autoridades de inmigración.",
+      line_school_name:"Inscripción Escolar", line_school_desc:"Todo niño puede inscribirse en una escuela pública de Massachusetts, sin importar su estatus migratorio. No se necesita número de Seguro Social.",
+      school_note:"Los estudiantes de Malden reciben desayuno y almuerzo gratis automáticamente — no se necesita papeleo.",
+      line_english_name:"Clases de Inglés", line_english_desc:"Clases gratuitas de inglés (ESOL) en toda el área de Boston, todos los niveles, algunas con cuidado de niños u horario nocturno.",
+      line_health_name:"Salud", line_health_desc:"No necesitas seguro médico, número de Seguro Social ni documentos migratorios para ser atendido/a en un centro de salud comunitario. Muchos inmigrantes califican para MassHealth sin importar su estatus.",
+      line_work_name:"Empleo y Transporte", line_work_desc:"Capacitación laboral gratuita, programas de inglés más trabajo, y ayuda para cubrir el costo del transporte.",
+      line_community_name:"Organizaciones Comunitarias y Culturales", line_community_desc:"A veces la ayuda más rápida viene de un grupo que ya conoce tu idioma y tu comunidad.",
+      trust_headline:"No tienes que explicar tu estatus para recibir ayuda.",
+      trust_body:"Los navegadores son voluntarios capacitados, no oficiales de inmigración. Este programa no pide ni requiere prueba de estatus migratorio. Si alguna vez tienes dudas sobre una llamada, un enlace o una organización, pregúntale primero a tu navegador.",
+      trust_phone_cta:"¿Prefieres hablar? Llámanos o envíanos un mensaje:",
+      signup_eyebrow:"COMIENZA", signup_headline:"Cuéntanos un poco sobre ti.",
+      signup_sub:"Te conectaremos con un navegador en pocos días. Sin subir documentos, sin preguntas sobre tu estatus — solo cómo contactarte y qué necesitas.",
+      form_name:"Tu nombre", form_contact:"Teléfono o correo electrónico (mejor forma de contactarte)", form_language:"Idioma en el que te sientes más cómodo/a",
+      form_neighborhood:"Vecindario o código postal (opcional)", form_needs:"¿Con qué necesitas ayuda? (marca todo lo que aplique)",
+      form_message:"¿Algo más que quieras contarnos? (opcional)", form_submit:"Enviar",
+      form_privacy:"Solo usamos esto para conectarte con un navegador. Nunca vendemos ni compartimos tu información.", form_need_other:"Algo más",
+      footer_disclaimer:"First 100 es un programa de navegadores voluntarios. No somos un bufete de abogados y no brindamos asesoría legal ni representación migratoria.",
+      footer_languages:"Este sitio está disponible en inglés, español, portugués, criollo haitiano, chino y vietnamita."
+    },
+    pt: {
+      nav_how:"Como Funciona", nav_resources:"Recursos", nav_signup:"Inscrever-se", nav_cta:"Consiga um Navegador",
+      call_label:"Ligue para nós:", promise_label:"Nosso Compromisso", filter_label:"Filtrar por",
+      hero_eyebrow:"UM PROGRAMA DE APOIO A RECÉM-CHEGADOS · GRANDE BOSTON",
+      hero_headline:"Seus primeiros 100 dias, no mapa.",
+      hero_sub:"O First 100 conecta famílias recém-chegadas a navegadores estudantis treinados que ajudam você a encontrar recursos reais e gratuitos, no seu idioma, desde o primeiro dia.",
+      hero_cta_primary:"Consiga um Navegador", hero_cta_secondary:"Ver Recursos",
+      feature_headline:"Do seu primeiro olá até o seu centésimo dia",
+      feature_body:"Cada família recebe um navegador treinado, um plano feito sob medida, e acompanhamento contínuo durante os primeiros 100 dias em Massachusetts.",
+      feature_link:"Veja os quatro passos →",
+      how_eyebrow:"COMO FUNCIONA", how_headline:"Quatro passos para se conectar.",
+      how_step1_title:"Entre em contato", how_step1_desc:"Ligue, envie mensagem ou preencha o formulário. Diga-nos em qual idioma você se sente mais à vontade.",
+      how_step2_title:"Seja conectado", how_step2_desc:"Conectamos você a um navegador estudantil treinado que fala seu idioma ou trabalha com um intérprete.",
+      how_step3_title:"Acesse recursos", how_step3_desc:"Seu navegador ajuda você a chegar a recursos locais reais: ajuda jurídica, escolas, aulas de inglês, saúde e mais.",
+      how_step4_title:"Continue com apoio", how_step4_desc:"Seu navegador acompanha você durante os primeiros 100 dias, ajustando o plano conforme necessário.",
+      resources_eyebrow:"COM O QUE AJUDAMOS", resources_headline_alt:"Biblioteca de Recursos",
+      resources_sub:"Cada organização abaixo é gratuita ou de baixo custo. Você não precisa se inscrever no First 100 para usá-las — mas seu navegador pode te ajudar a chegar lá.",
+      quicknumbers_eyebrow:"PRECISA DE AJUDA AGORA?", quicknumbers_headline:"Essas linhas são gratuitas, confidenciais e atendem em vários idiomas.",
+      qn_211_label:"Comida, moradia ou qualquer necessidade urgente", qn_988_label:"Crise de saúde mental, a qualquer hora",
+      qn_bhhl_label:"Orientação gratuita de saúde mental, sem necessidade de seguro", qn_wfma_label:"Ajuda para solicitar carteira de motorista — qualquer status migratório",
+      line_legal_name:"Jurídico e Imigração", line_legal_desc:"Ajuda gratuita com documentação, informações sobre seus direitos e apoio no tribunal. Nenhuma dessas organizações cobra por hora.",
+      notario_warning:"Aviso: nos Estados Unidos, um \"notário\" ou \"notary\" NÃO é um advogado e não pode dar consultoria jurídica, assinar seus formulários ou representá-lo no tribunal — mesmo que isso signifique outra coisa no seu país de origem. Sempre confirme que está falando com um advogado licenciado ou um representante credenciado pelo DOJ antes de pagar alguém por ajuda migratória.",
+      line_ids_name:"Carteira de Motorista, ID e Transporte", line_ids_desc:"Massachusetts permite que qualquer residente solicite uma carteira de motorista padrão, independentemente do status migratório — e por lei, o RMV não pode compartilhar suas informações com autoridades de imigração.",
+      line_school_name:"Matrícula Escolar", line_school_desc:"Toda criança pode se matricular em escola pública em Massachusetts, independentemente do status migratório. Não é necessário número de Seguro Social.",
+      school_note:"Os alunos de Malden recebem café da manhã e almoço grátis automaticamente — sem necessidade de papelada.",
+      line_english_name:"Aulas de Inglês", line_english_desc:"Aulas gratuitas de inglês (ESOL) em toda a Grande Boston, todos os níveis, algumas com cuidado infantil ou horário noturno.",
+      line_health_name:"Saúde", line_health_desc:"Não é necessário seguro-saúde, número de Seguro Social ou documentos de imigração para ser atendido em um centro de saúde comunitário. Muitos imigrantes se qualificam para o MassHealth independentemente do status.",
+      line_work_name:"Emprego e Transporte", line_work_desc:"Treinamento profissional gratuito, programas de inglês combinados com trabalho, e ajuda para cobrir o custo do transporte.",
+      line_community_name:"Organizações Comunitárias e Culturais", line_community_desc:"Às vezes a ajuda mais rápida vem de um grupo que já conhece seu idioma e sua comunidade.",
+      trust_headline:"Você não precisa explicar seu status para receber ajuda.",
+      trust_body:"Os navegadores são voluntários treinados, não são autoridades de imigração. Este programa não pede nem exige comprovação de status migratório. Se tiver dúvidas sobre uma ligação, link ou organização, pergunte primeiro ao seu navegador.",
+      trust_phone_cta:"Prefere conversar? Ligue ou mande mensagem:",
+      signup_eyebrow:"COMECE AGORA", signup_headline:"Conte-nos um pouco sobre você.",
+      signup_sub:"Vamos conectar você a um navegador em poucos dias. Sem envio de documentos, sem perguntas sobre status — só como te contatar e do que você precisa.",
+      form_name:"Seu nome", form_contact:"Telefone ou e-mail (melhor forma de contato)", form_language:"Idioma em que você se sente mais à vontade",
+      form_neighborhood:"Bairro ou CEP (opcional)", form_needs:"Com o que você precisa de ajuda? (marque tudo que se aplica)",
+      form_message:"Mais alguma coisa que gostaria de nos contar? (opcional)", form_submit:"Enviar",
+      form_privacy:"Usamos isso apenas para conectar você a um navegador. Nunca vendemos nem compartilhamos suas informações.", form_need_other:"Outra coisa",
+      footer_disclaimer:"O First 100 é um programa de navegadores voluntários. Não somos um escritório de advocacia e não oferecemos consultoria jurídica nem representação de imigração.",
+      footer_languages:"Este site está disponível em inglês, espanhol, português, crioulo haitiano, chinês e vietnamita."
+    },
+    ht: {
+      nav_how:"Kijan Sa Fonksyone", nav_resources:"Resous", nav_signup:"Enskri", nav_cta:"Jwenn yon Navigatè",
+      call_label:"Rele nou:", promise_label:"Angajman Nou", filter_label:"Filtre pa",
+      hero_eyebrow:"YON PWOGRAM SIPÒ POU MOUN KI FENK RIVE · ZÒN BOSTON",
+      hero_headline:"Premye 100 jou ou yo, sou yon kat.",
+      hero_sub:"First 100 konekte fanmi ki fenk rive ak elèv navigatè ki resevwa fòmasyon pou ede w jwenn resous vre ki gratis — nan lang ou — depi premye jou a.",
+      hero_cta_primary:"Jwenn yon Navigatè", hero_cta_secondary:"Gade Resous",
+      feature_headline:"Depi premye bonjou w rive nan santyèm jou w",
+      feature_body:"Chak fanmi resevwa yon navigatè ki resevwa fòmasyon, yon plan ki fèt pou bezwen yo, ak swivi ki kontinye pandan premye 100 jou yo nan Massachusetts.",
+      feature_link:"Gade kat etap yo →",
+      how_eyebrow:"KIJAN SA FONKSYONE", how_headline:"Kat etap pou konekte.",
+      how_step1_title:"Kontakte nou", how_step1_desc:"Rele, voye mesaj, oswa ranpli fòm lan. Di nou ki lang ou pi alèz ladan.",
+      how_step2_title:"Jwenn yon navigatè", how_step2_desc:"Nou konekte w ak yon navigatè elèv ki resevwa fòmasyon ki pale lang ou oswa travay ak yon entèprèt.",
+      how_step3_title:"Konekte ak resous", how_step3_desc:"Navigatè w ede w rive jwenn resous lokal ki reyèl: èd legal, lekòl, kou anglè, sante, ak plis ankò.",
+      how_step4_title:"Kontinye jwenn sipò", how_step4_desc:"Navigatè w kontinye pran nouvèl ou pandan premye 100 jou ou yo, epi ajiste plan an jan sa nesesè.",
+      resources_eyebrow:"SA NOU EDE AVÈK", resources_headline_alt:"Bibliyotèk Resous",
+      resources_sub:"Chak òganizasyon anba a gratis oswa a pri ba. Ou pa bezwen enskri nan First 100 pou itilize yo — men navigatè w ka ede w rive la.",
+      quicknumbers_eyebrow:"OU BEZWEN ÈD KOUNYE A?", quicknumbers_headline:"Liy sa yo gratis, konfidansyèl, epi yo reponn nan plizyè lang.",
+      qn_211_label:"Manje, lojman, oswa nenpòt bezwen ijan", qn_988_label:"Kriz sante mantal, nenpòt lè",
+      qn_bhhl_label:"Konsèy sante mantal gratis, ou pa bezwen asirans", qn_wfma_label:"Èd pou aplike pou yon lisans pou kondwi — nenpòt estati imigrasyon",
+      line_legal_name:"Legal ak Imigrasyon", line_legal_desc:"Èd gratis avèk papye, enfòmasyon sou dwa ou, ak sipò nan tribinal. Okenn nan òganizasyon sa yo pa fè w peye pa lè.",
+      notario_warning:"Avètisman: Ozetazini, yon \"notario\" oswa \"notario piblik\" PA yon avoka e li pa ka ba ou konsèy legal, siyen fòm ou yo, oswa reprezante w nan tribinal — menmsi sa vle di yon lòt bagay nan peyi orijin ou. Toujou konfime w ap pale ak yon avoka ki gen lisans oswa yon reprezantan DOJ akredite anvan ou peye yon moun pou èd imigrasyon.",
+      line_ids_name:"Lisans Kondwi, ID ak Transpò", line_ids_desc:"Massachusetts pèmèt nenpòt rezidan aplike pou yon lisans kondwi estanda, kèlkeswa estati imigrasyon yo — e dapre lalwa, RMV pa ka pataje enfòmasyon w ak otorite imigrasyon.",
+      line_school_name:"Enskripsyon Lekòl", line_school_desc:"Chak timoun ka enskri nan lekòl piblik Massachusetts, kèlkeswa estati imigrasyon yo. Yo pa mande nimewo Sekirite Sosyal.",
+      school_note:"Elèv Malden yo resevwa manje maten ak dine gratis otomatikman — pa gen papye pou ranpli.",
+      line_english_name:"Kou Anglè", line_english_desc:"Kou anglè gratis (ESOL) nan tout zòn Boston, tout nivo, kèk avèk gadri oswa lè aswè.",
+      line_health_name:"Sante", line_health_desc:"Ou pa bezwen asirans, nimewo Sekirite Sosyal, oswa dokiman imigrasyon pou yo wè w nan yon sant sante kominotè. Anpil imigran kalifye pou MassHealth kèlkeswa estati yo.",
+      line_work_name:"Travay ak Transpò", line_work_desc:"Fòmasyon travay gratis, pwogram anglè ansanm ak travay, ak èd pou peye pou transpò.",
+      line_community_name:"Òganizasyon Kominotè ak Kiltirèl", line_community_desc:"Pafwa èd ki pi rapid la soti nan yon gwoup ki deja konnen lang ou ak kominote w.",
+      trust_headline:"Ou pa oblije eksplike estati w pou resevwa èd.",
+      trust_body:"Navigatè yo se volontè ki resevwa fòmasyon, yo pa ofisyèl imigrasyon. Pwogram sa a pa mande ni egzije prèv estati imigrasyon. Si w janm gen dout sou yon apèl, yon lyen, oswa yon òganizasyon, mande navigatè w anvan.",
+      trust_phone_cta:"Ou pito pale? Rele oswa voye mesaj ba nou:",
+      signup_eyebrow:"KOMANSE", signup_headline:"Di nou yon ti kras sou ou.",
+      signup_sub:"N ap konekte w ak yon navigatè nan kèk jou. Pa gen dokiman pou telechaje, pa gen kesyon sou estati — jis kijan pou kontakte w ak sa ou bezwen.",
+      form_name:"Non ou", form_contact:"Telefòn oswa imèl (pi bon fason pou kontakte w)", form_language:"Lang ou pi alèz ladan",
+      form_neighborhood:"Katye oswa kòd postal (opsyonèl)", form_needs:"Kisa ou bezwen èd avèk? (make tout sa ki aplike)",
+      form_message:"Gen lòt bagay ou ta renmen di nou? (opsyonèl)", form_submit:"Voye",
+      form_privacy:"Nou sèlman itilize sa a pou konekte w ak yon navigatè. Nou pa janm vann oswa pataje enfòmasyon w.", form_need_other:"Yon lòt bagay",
+      footer_disclaimer:"First 100 se yon pwogram navigatè volontè. Nou pa yon biwo avoka e nou pa bay konsèy legal ni reprezantasyon imigrasyon.",
+      footer_languages:"Sit sa a disponib an anglè, panyòl, pòtigè, kreyòl ayisyen, chinwa, ak vyetnamyen."
+    },
+    zh: {
+      nav_how:"运作方式", nav_resources:"资源", nav_signup:"报名", nav_cta:"获取引导员",
+      call_label:"致电我们：", promise_label:"我们的承诺", filter_label:"按类别筛选",
+      hero_eyebrow:"新移民支持项目 · 大波士顿地区",
+      hero_headline:"为您绘制前100天的路线图。",
+      hero_sub:"First 100 项目为新抵达的家庭配备经过培训的学生引导员，从第一天起就帮助您用您的母语找到真实、免费的资源。",
+      hero_cta_primary:"获取引导员", hero_cta_secondary:"查看资源",
+      feature_headline:"从初次问候到第100天",
+      feature_body:"每个家庭都会获得一位经过培训的引导员、一份量身定制的计划，以及在马萨诸塞州前100天里持续的跟进支持。",
+      feature_link:"查看四个步骤 →",
+      how_eyebrow:"运作方式", how_headline:"四个步骤，建立连接。",
+      how_step1_title:"联系我们", how_step1_desc:"打电话、发短信或填写表格。告诉我们您最习惯使用的语言。",
+      how_step2_title:"获得匹配", how_step2_desc:"我们为您配对一位会说您的语言、或与口译员合作的、经过培训的学生引导员。",
+      how_step3_title:"对接资源", how_step3_desc:"您的引导员帮助您接触真实的本地资源：法律援助、学校、英语课程、医疗等。",
+      how_step4_title:"持续获得支持", how_step4_desc:"在您的前100天里，引导员会持续与您联系，并根据情况调整计划。",
+      resources_eyebrow:"我们提供的帮助", resources_headline_alt:"资源库",
+      resources_sub:"以下每个机构都是免费或低成本的。您不需要报名 First 100 项目也可以使用这些资源——但引导员可以帮您联系到它们。",
+      quicknumbers_eyebrow:"现在需要帮助吗？", quicknumbers_headline:"以下热线均为免费、保密，并提供多语言服务。",
+      qn_211_label:"食物、住房或任何紧急需求", qn_988_label:"心理健康危机，全天候",
+      qn_bhhl_label:"免费心理健康指导，无需保险", qn_wfma_label:"协助申请驾照——不限移民身份",
+      line_legal_name:"法律与移民", line_legal_desc:"免费协助文件办理、了解您的权利、以及出庭支持。以下机构均不按小时收费。",
+      notario_warning:"提醒：在美国，\"notario\"或公证员（notario público）并不是律师，不能提供法律咨询、代签表格或在法庭上代表您——即使在您的祖国这个词有不同含义。在为移民帮助付费之前，请务必确认对方是持照律师或经美国司法部认证的代表。",
+      line_ids_name:"驾照、身份证件与交通", line_ids_desc:"无论移民身份如何，马萨诸塞州允许任何居民申请标准驾照——根据法律，车辆管理局（RMV）不得将您的信息透露给移民执法部门。",
+      line_school_name:"学校注册", line_school_desc:"无论移民身份如何，每个孩子都可以在马萨诸塞州公立学校注册，不需要社会安全号码。",
+      school_note:"马尔登（Malden）的学生自动获得免费早餐和午餐——无需任何文件。",
+      line_english_name:"英语课程", line_english_desc:"大波士顿地区提供免费英语（ESOL）课程，各个级别皆有，部分课程提供托儿服务或夜间班。",
+      line_health_name:"医疗", line_health_desc:"在社区医疗中心就诊无需保险、社会安全号码或移民证件。许多移民无论身份如何都符合 MassHealth 资格。",
+      line_work_name:"就业与交通", line_work_desc:"免费职业培训、英语加工作结合的项目，以及交通费用补助。",
+      line_community_name:"社区与文化组织", line_community_desc:"有时候，最快获得帮助的方式是找一个已经了解您的语言和社区的组织。",
+      trust_headline:"获得帮助不需要说明您的身份。",
+      trust_body:"引导员是经过培训的志愿者，不是移民官员。本项目不会索取或要求提供移民身份证明。如果您对某个电话、链接或机构有任何疑问，请先咨询您的引导员。",
+      trust_phone_cta:"更喜欢电话沟通？请致电或发短信给我们：",
+      signup_eyebrow:"开始报名", signup_headline:"告诉我们一些关于您的信息。",
+      signup_sub:"我们会在几天内为您匹配一位引导员。无需上传文件，不询问身份问题——只需告诉我们如何联系您以及您需要什么帮助。",
+      form_name:"您的姓名", form_contact:"电话或邮箱（最佳联系方式）", form_language:"您最习惯使用的语言",
+      form_neighborhood:"社区或邮编（可选）", form_needs:"您需要哪些方面的帮助？（可多选）",
+      form_message:"还有什么想告诉我们的吗？（可选）", form_submit:"提交",
+      form_privacy:"我们仅使用这些信息为您匹配引导员，绝不会出售或分享您的信息。", form_need_other:"其他",
+      footer_disclaimer:"First 100 是一个志愿引导员项目。我们不是律师事务所，不提供法律咨询或移民代理服务。",
+      footer_languages:"本网站提供英语、西班牙语、葡萄牙语、海地克里奥尔语、中文和越南语版本。"
+    },
+    vi: {
+      nav_how:"Cách Hoạt Động", nav_resources:"Nguồn Hỗ Trợ", nav_signup:"Đăng Ký", nav_cta:"Nhận Người Hướng Dẫn",
+      call_label:"Gọi cho chúng tôi:", promise_label:"Cam Kết Của Chúng Tôi", filter_label:"Lọc theo",
+      hero_eyebrow:"CHƯƠNG TRÌNH HỖ TRỢ NGƯỜI MỚI ĐẾN · KHU VỰC BOSTON",
+      hero_headline:"100 ngày đầu tiên của bạn, được vạch rõ.",
+      hero_sub:"First 100 kết nối các gia đình mới đến với những người hướng dẫn là sinh viên được đào tạo, giúp bạn tìm nguồn hỗ trợ thật, miễn phí — bằng ngôn ngữ của bạn — ngay từ ngày đầu.",
+      hero_cta_primary:"Nhận Người Hướng Dẫn", hero_cta_secondary:"Xem Nguồn Hỗ Trợ",
+      feature_headline:"Từ lời chào đầu tiên đến ngày thứ 100",
+      feature_body:"Mỗi gia đình đều có một người hướng dẫn được đào tạo, một kế hoạch riêng, và được theo dõi liên tục trong suốt 100 ngày đầu tại Massachusetts.",
+      feature_link:"Xem bốn bước →",
+      how_eyebrow:"CÁCH HOẠT ĐỘNG", how_headline:"Bốn bước để được kết nối.",
+      how_step1_title:"Liên hệ với chúng tôi", how_step1_desc:"Gọi điện, nhắn tin, hoặc điền vào biểu mẫu. Cho chúng tôi biết ngôn ngữ bạn thấy thoải mái nhất.",
+      how_step2_title:"Được kết nối", how_step2_desc:"Chúng tôi ghép bạn với một người hướng dẫn sinh viên được đào tạo, nói ngôn ngữ của bạn hoặc làm việc cùng thông dịch viên.",
+      how_step3_title:"Kết nối nguồn hỗ trợ", how_step3_desc:"Người hướng dẫn giúp bạn tiếp cận các nguồn hỗ trợ địa phương thật sự: trợ giúp pháp lý, trường học, lớp tiếng Anh, y tế, và hơn thế nữa.",
+      how_step4_title:"Tiếp tục được hỗ trợ", how_step4_desc:"Người hướng dẫn sẽ liên lạc với bạn trong suốt 100 ngày đầu, điều chỉnh kế hoạch khi cần.",
+      resources_eyebrow:"CHÚNG TÔI HỖ TRỢ NHỮNG GÌ", resources_headline_alt:"Thư Viện Nguồn Hỗ Trợ",
+      resources_sub:"Mỗi tổ chức dưới đây đều miễn phí hoặc chi phí thấp. Bạn không cần đăng ký First 100 để sử dụng — nhưng người hướng dẫn có thể giúp bạn đến đó.",
+      quicknumbers_eyebrow:"CẦN GIÚP ĐỠ NGAY BÂY GIỜ?", quicknumbers_headline:"Các đường dây này miễn phí, bảo mật, và hỗ trợ bằng nhiều ngôn ngữ.",
+      qn_211_label:"Thực phẩm, nhà ở, hoặc bất kỳ nhu cầu khẩn cấp nào", qn_988_label:"Khủng hoảng sức khỏe tâm thần, bất kỳ lúc nào",
+      qn_bhhl_label:"Tư vấn sức khỏe tâm thần miễn phí, không cần bảo hiểm", qn_wfma_label:"Hỗ trợ xin bằng lái xe — không phân biệt tình trạng di trú",
+      line_legal_name:"Pháp Lý &amp; Di Trú", line_legal_desc:"Hỗ trợ miễn phí về giấy tờ, thông tin về quyền của bạn, và hỗ trợ tại tòa án. Không tổ chức nào trong số này tính phí theo giờ.",
+      notario_warning:"Cảnh báo: tại Hoa Kỳ, một \"notario\" hay \"notario público\" KHÔNG PHẢI là luật sư và không thể tư vấn pháp lý, ký thay giấy tờ, hay đại diện bạn tại tòa — dù ở quê nhà từ này có thể mang nghĩa khác. Luôn xác nhận bạn đang nói chuyện với một luật sư có giấy phép hoặc đại diện được Bộ Tư Pháp (DOJ) công nhận trước khi trả tiền cho bất kỳ ai để được giúp đỡ về di trú.",
+      line_ids_name:"Bằng Lái Xe, Giấy Tờ Tùy Thân &amp; Di Chuyển", line_ids_desc:"Massachusetts cho phép bất kỳ cư dân nào xin bằng lái xe tiêu chuẩn, bất kể tình trạng di trú — và theo luật, RMV không được chia sẻ thông tin của bạn với cơ quan di trú.",
+      line_school_name:"Đăng Ký Trường Học", line_school_desc:"Mọi trẻ em đều có thể đăng ký học tại trường công lập Massachusetts, bất kể tình trạng di trú. Không cần số An Sinh Xã Hội.",
+      school_note:"Học sinh Malden tự động được ăn sáng và ăn trưa miễn phí — không cần giấy tờ.",
+      line_english_name:"Lớp Học Tiếng Anh", line_english_desc:"Các lớp ESOL miễn phí trên khắp khu vực Boston, mọi trình độ, một số có giữ trẻ hoặc lớp buổi tối.",
+      line_health_name:"Y Tế", line_health_desc:"Không cần bảo hiểm, số An Sinh Xã Hội, hay giấy tờ di trú để được khám tại trung tâm y tế cộng đồng. Nhiều người nhập cư đủ điều kiện nhận MassHealth bất kể tình trạng di trú.",
+      line_work_name:"Việc Làm &amp; Di Chuyển", line_work_desc:"Đào tạo nghề miễn phí, chương trình kết hợp học tiếng Anh và làm việc, và hỗ trợ chi phí đi lại.",
+      line_community_name:"Tổ Chức Cộng Đồng &amp; Văn Hóa", line_community_desc:"Đôi khi sự giúp đỡ nhanh nhất đến từ một tổ chức đã hiểu ngôn ngữ và cộng đồng của bạn.",
+      trust_headline:"Bạn không cần giải thích tình trạng của mình để nhận được giúp đỡ.",
+      trust_body:"Người hướng dẫn là tình nguyện viên được đào tạo, không phải quan chức di trú. Chương trình này không hỏi hay yêu cầu bằng chứng về tình trạng di trú. Nếu bạn từng không chắc chắn về một cuộc gọi, đường liên kết, hay tổ chức nào, hãy hỏi người hướng dẫn của bạn trước.",
+      trust_phone_cta:"Muốn nói chuyện trực tiếp? Gọi hoặc nhắn tin cho chúng tôi:",
+      signup_eyebrow:"BẮT ĐẦU", signup_headline:"Cho chúng tôi biết một chút về bạn.",
+      signup_sub:"Chúng tôi sẽ ghép bạn với một người hướng dẫn trong vài ngày. Không cần tải lên giấy tờ, không hỏi về tình trạng di trú — chỉ cần biết cách liên hệ và bạn cần gì.",
+      form_name:"Tên của bạn", form_contact:"Số điện thoại hoặc email (cách liên hệ tốt nhất)", form_language:"Ngôn ngữ bạn thấy thoải mái nhất",
+      form_neighborhood:"Khu phố hoặc mã zip (không bắt buộc)", form_needs:"Bạn cần giúp đỡ về điều gì? (chọn tất cả các mục phù hợp)",
+      form_message:"Bạn có muốn cho chúng tôi biết thêm điều gì không? (không bắt buộc)", form_submit:"Gửi",
+      form_privacy:"Chúng tôi chỉ sử dụng thông tin này để ghép bạn với người hướng dẫn. Chúng tôi không bao giờ bán hoặc chia sẻ thông tin của bạn.", form_need_other:"Điều khác",
+      footer_disclaimer:"First 100 là một chương trình hướng dẫn tình nguyện. Chúng tôi không phải là công ty luật và không cung cấp tư vấn pháp lý hay đại diện di trú.",
+      footer_languages:"Trang web này có bằng tiếng Anh, Tây Ban Nha, Bồ Đào Nha, Kreyòl Haiti, tiếng Trung, và tiếng Việt."
+    }
   };
-  particles.push(p);
-  return p;
-}
+  var langNames = {en:"English", es:"Español", pt:"Português", ht:"Kreyòl Ayisyen", zh:"中文", vi:"Tiếng Việt"};
 
-function burst(x, y, count = 25, energy = 4) {
-  for (let i = 0; i < count; i++) {
-    const a = (i / count) * 6.28 + Math.random() * 0.4;
-    const spd = Math.random() * energy + 1;
-    spawnParticle(x, y, {
-      vx: Math.cos(a) * spd, vy: Math.sin(a) * spd,
-      r: Math.random() * 2.5 + 0.5, life: 1,
-      decay: 0.003 + Math.random() * 0.005
-    });
-  }
-}
+  var i18nEls = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+  var originalHTML = i18nEls.map(function(el){ return el.innerHTML; });
 
-function supernova(x, y) {
-  flash.style.setProperty('--sx', (x / W * 100) + '%');
-  flash.style.setProperty('--sy', (y / H * 100) + '%');
-  flash.classList.add('bang');
-  setTimeout(() => flash.classList.remove('bang'), 120);
-
-  burst(x, y, 70, 9);
-
-  // Shockwave
-  particles.forEach(p => {
-    const dx = p.x - x, dy = p.y - y;
-    const dist = Math.sqrt(dx * dx + dy * dy) + 1;
-    if (dist < 500) {
-      const f = (500 - dist) / 500 * 14;
-      p.vx += (dx / dist) * f;
-      p.vy += (dy / dist) * f;
-    }
-  });
-
-  nebulaClouds.push({
-    x, y,
-    rx: Math.random() * 130 + 80, ry: Math.random() * 90 + 60,
-    hue: Math.random() * 360,
-    drift: (Math.random() - 0.5) * 0.1, phase: 0
-  });
-}
-
-// ─── Physics ───
-function physics(dt) {
-  const gStr = currentMode === 'orbit' ? 120 : currentMode === 'swarm' ? 50 : 28;
-
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
-
-    // Mouse gravity
-    if (mouse.down) {
-      const dx = mouse.x - p.x, dy = mouse.y - p.y;
-      const d = Math.sqrt(dx * dx + dy * dy) + 10;
-      const f = gStr / d;
-      p.vx += (dx / d) * f * dt;
-      p.vy += (dy / d) * f * dt;
-    }
-
-    // Gravity wells
-    for (const gw of gravityWells) {
-      const dx = gw.x - p.x, dy = gw.y - p.y;
-      const d = Math.sqrt(dx * dx + dy * dy) + 10;
-      p.vx += (dx / d) * (gw.str / d) * dt;
-      p.vy += (dy / d) * (gw.str / d) * dt;
-    }
-
-    // Mode behaviors
-    if (currentMode === 'orbit') {
-      const cx = W / 2, cy = H / 2;
-      const dx = cx - p.x, dy = cy - p.y;
-      const d = Math.sqrt(dx * dx + dy * dy) + 10;
-      p.vx += (dx / d) * 0.18 * dt;
-      p.vy += (dy / d) * 0.18 * dt;
-    }
-
-    if (currentMode === 'swarm') {
-      let ax = 0, ay = 0, cnt = 0;
-      for (let j = 0; j < particles.length; j += 3) {
-        if (i === j) continue;
-        const o = particles[j];
-        const dx = o.x - p.x, dy = o.y - p.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < 12000) {
-          ax += o.vx; ay += o.vy; cnt++;
-          if (d2 < 800) { p.vx -= dx * 0.004; p.vy -= dy * 0.004; }
+  function setLang(lang){
+    i18nEls.forEach(function(el, idx){
+      if(lang === "en"){
+        el.innerHTML = originalHTML[idx];
+      } else {
+        var key = el.getAttribute("data-i18n");
+        var dict = translations[lang];
+        if(dict && dict[key] !== undefined){
+          el.innerHTML = dict[key];
         }
       }
-      if (cnt) { p.vx += (ax / cnt - p.vx) * 0.012; p.vy += (ay / cnt - p.vy) * 0.012; }
-    }
-
-    p.vx *= 0.998; p.vy *= 0.998;
-    const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-    if (spd > 14) { p.vx = (p.vx / spd) * 14; p.vy = (p.vy / spd) * 14; }
-
-    p.x += p.vx * dt * timeScale;
-    p.y += p.vy * dt * timeScale;
-
-    // Wrap
-    if (p.x < -60) p.x = W + 60;
-    if (p.x > W + 60) p.x = -60;
-    if (p.y < -60) p.y = H + 60;
-    if (p.y > H + 60) p.y = -60;
-
-    p.trail.push({ x: p.x, y: p.y });
-    if (p.trail.length > TRAIL_LEN) p.trail.shift();
-
-    p.pulse += p.pulseSpd * timeScale;
-    p.life -= p.decay * timeScale;
-    if (p.life <= 0) particles.splice(i, 1);
-  }
-
-  for (let i = gravityWells.length - 1; i >= 0; i--) {
-    gravityWells[i].life -= 0.008;
-    if (gravityWells[i].life <= 0) gravityWells.splice(i, 1);
-  }
-}
-
-// ─── Rendering ───
-function drawBgStars() {
-  for (const s of bgStars) {
-    s.phase += s.speed;
-    const a = (Math.sin(s.phase) * 0.3 + 0.7) * s.bright;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, 6.28);
-    ctx.fillStyle = `rgba(210,215,255,${a * 0.55})`;
-    ctx.fill();
-  }
-}
-
-function drawNebulae() {
-  for (const n of nebulaClouds) {
-    n.phase += 0.002;
-    n.x += n.drift;
-    if (n.x < -400) n.x = W + 400;
-    if (n.x > W + 400) n.x = -400;
-    const a = 0.035 + Math.sin(n.phase) * 0.012;
-    const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.rx);
-    g.addColorStop(0, hsl(n.hue, 55, 38, a));
-    g.addColorStop(0.5, hsl(n.hue + 20, 45, 28, a * 0.4));
-    g.addColorStop(1, 'transparent');
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.ellipse(n.x, n.y, n.rx, n.ry, 0, 0, 6.28);
-    ctx.fill();
-  }
-}
-
-function drawConnections() {
-  const md = 110, md2 = md * md;
-  // Only check a subset for performance
-  const step = particles.length > 400 ? 2 : 1;
-  for (let i = 0; i < particles.length; i += step) {
-    const a = particles[i];
-    for (let j = i + 1; j < particles.length; j += step) {
-      const b = particles[j];
-      const dx = b.x - a.x, dy = b.y - a.y;
-      const d2 = dx * dx + dy * dy;
-      if (d2 < md2) {
-        const alpha = (1 - Math.sqrt(d2) / md) * 0.1 * Math.min(a.life, b.life);
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = hsl(250, 50, 70, alpha);
-        ctx.lineWidth = 0.4;
-        ctx.stroke();
-      }
-    }
-  }
-}
-
-function drawParticles() {
-  for (const p of particles) {
-    const { color: c, life, trail } = p;
-    const pr = p.r + Math.sin(p.pulse) * 0.5;
-    const a = Math.min(life, 1);
-
-    // Trail
-    if (trail.length > 2) {
-      ctx.beginPath();
-      ctx.moveTo(trail[0].x, trail[0].y);
-      for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
-      ctx.strokeStyle = hsl(c.h, c.s, c.l, a * 0.12);
-      ctx.lineWidth = pr * 0.5;
-      ctx.stroke();
-    }
-
-    // Glow
-    const gg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, pr * 5);
-    gg.addColorStop(0, hsl(c.h, c.s, c.l, a * 0.18));
-    gg.addColorStop(1, 'transparent');
-    ctx.fillStyle = gg;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, pr * 5, 0, 6.28);
-    ctx.fill();
-
-    // Core
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, pr, 0, 6.28);
-    ctx.fillStyle = hsl(c.h, c.s, Math.min(c.l + 20, 100), a);
-    ctx.fill();
-
-    // Hot center
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, pr * 0.35, 0, 6.28);
-    ctx.fillStyle = `rgba(255,255,255,${a * 0.65})`;
-    ctx.fill();
-  }
-}
-
-function drawGravityWells() {
-  for (const gw of gravityWells) {
-    const a = gw.life * 0.25;
-    for (let i = 0; i < 3; i++) {
-      const r = 25 + i * 18 + Math.sin(epoch * 0.04 + i) * 8;
-      ctx.beginPath();
-      ctx.arc(gw.x, gw.y, r, 0, 6.28);
-      ctx.strokeStyle = hsl(190, 80, 60, a * (1 - i * 0.3));
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-    }
-  }
-}
-
-function drawMouseAttractor(t) {
-  if (!mouse.down) return;
-  const pr = 14 + Math.sin(t * 0.004) * 5;
-  const g = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, pr * 4);
-  g.addColorStop(0, 'rgba(74,240,255,0.25)');
-  g.addColorStop(0.5, 'rgba(74,240,255,0.04)');
-  g.addColorStop(1, 'transparent');
-  ctx.fillStyle = g;
-  ctx.beginPath();
-  ctx.arc(mouse.x, mouse.y, pr * 4, 0, 6.28);
-  ctx.fill();
-
-  ctx.save();
-  ctx.translate(mouse.x, mouse.y);
-  ctx.rotate(t * 0.002);
-  ctx.beginPath();
-  ctx.arc(0, 0, pr, 0, Math.PI * 1.5);
-  ctx.strokeStyle = 'rgba(74,240,255,0.45)';
-  ctx.lineWidth = 1.2;
-  ctx.stroke();
-  ctx.restore();
-}
-
-// ─── Main Loop ───
-let lastT = 0;
-function loop(time) {
-  const dt = Math.min((time - lastT) / 16, 3);
-  lastT = time;
-  epoch++;
-
-  ctx.clearRect(0, 0, W, H);
-
-  drawBgStars();
-  drawNebulae();
-  drawConnections();
-  drawGravityWells();
-  drawParticles();
-  drawMouseAttractor(time);
-
-  physics(dt);
-
-  // Ambient spawn
-  if (particles.length < 50 && Math.random() < 0.04) {
-    spawnParticle(Math.random() * W, Math.random() * H, {
-      life: 0.85, decay: 0.0004, r: Math.random() * 2 + 0.5
     });
+    document.documentElement.setAttribute("lang", lang);
+    document.getElementById("langCurrent").textContent = langNames[lang];
   }
 
-  // HUD
-  if (epoch % 8 === 0) {
-    document.getElementById('statBodies').textContent = particles.length;
-    const ent = Math.min(1, particles.reduce((s, p) =>
-      s + Math.sqrt(p.vx * p.vx + p.vy * p.vy), 0) / (particles.length + 1) / 5);
-    document.getElementById('statEntropy').textContent = ent.toFixed(2);
-    document.getElementById('statTime').textContent = timeScale.toFixed(2) + '×';
-    document.getElementById('statEpoch').textContent = epoch;
-  }
-
-  requestAnimationFrame(loop);
-}
-
-// ─── Events ───
-canvas.addEventListener('mousemove', e => {
-  mouse.dx = e.clientX - mouse.x;
-  mouse.dy = e.clientY - mouse.y;
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-  if (mouse.down && Math.random() < 0.45) {
-    spawnParticle(mouse.x, mouse.y, {
-      vx: mouse.dx * 0.3 + (Math.random() - 0.5),
-      vy: mouse.dy * 0.3 + (Math.random() - 0.5),
-      r: Math.random() * 2 + 0.7, life: 0.9, decay: 0.004
-    });
-  }
-});
-
-canvas.addEventListener('mousedown', e => { mouse.down = true; mouse.x = e.clientX; mouse.y = e.clientY; });
-canvas.addEventListener('mouseup', e => {
-  mouse.down = false;
-  gravityWells.push({ x: e.clientX, y: e.clientY, str: 55 + Math.random() * 45, life: 1 });
-});
-
-canvas.addEventListener('click', e => { burst(e.clientX, e.clientY, 15 + Math.floor(Math.random() * 10), 3.5); });
-canvas.addEventListener('dblclick', e => { supernova(e.clientX, e.clientY); });
-canvas.addEventListener('wheel', e => {
-  e.preventDefault();
-  timeScale = Math.max(0.05, Math.min(5, timeScale - e.deltaY * 0.001));
-}, { passive: false });
-
-// Touch
-canvas.addEventListener('touchstart', e => {
-  e.preventDefault();
-  const t = e.touches[0];
-  mouse.down = true; mouse.x = t.clientX; mouse.y = t.clientY;
-  burst(t.clientX, t.clientY, 12, 3);
-}, { passive: false });
-canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
-  const t = e.touches[0];
-  mouse.dx = t.clientX - mouse.x; mouse.dy = t.clientY - mouse.y;
-  mouse.x = t.clientX; mouse.y = t.clientY;
-  if (Math.random() < 0.5) spawnParticle(mouse.x, mouse.y, {
-    vx: mouse.dx * 0.2, vy: mouse.dy * 0.2,
-    r: Math.random() * 2 + 0.7, life: 0.8, decay: 0.005
+  var langToggle = document.getElementById("langToggle");
+  var langMenu = document.getElementById("langMenu");
+  langToggle.addEventListener("click", function(){
+    var open = !langMenu.hasAttribute("hidden");
+    if(open){ langMenu.setAttribute("hidden",""); langToggle.setAttribute("aria-expanded","false"); }
+    else { langMenu.removeAttribute("hidden"); langToggle.setAttribute("aria-expanded","true"); }
   });
-}, { passive: false });
-canvas.addEventListener('touchend', () => {
-  mouse.down = false;
-  gravityWells.push({ x: mouse.x, y: mouse.y, str: 65, life: 1 });
-});
+  langMenu.querySelectorAll("button[data-lang]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      setLang(btn.getAttribute("data-lang"));
+      langMenu.setAttribute("hidden","");
+      langToggle.setAttribute("aria-expanded","false");
+    });
+  });
 
-// ─── Modes ───
-function toggleMode(mode, btn) {
-  currentMode = mode;
-  document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const d = document.getElementById('modeDisplay');
-  d.textContent = mode.toUpperCase();
-  d.classList.remove('show');
-  void d.offsetWidth;
-  d.classList.add('show');
-}
+  var resToggle = document.getElementById("resToggle");
+  var resPanel = document.getElementById("resPanel");
+  resToggle.addEventListener("click", function(){
+    var open = !resPanel.hasAttribute("hidden");
+    if(open){ resPanel.setAttribute("hidden",""); resToggle.setAttribute("aria-expanded","false"); }
+    else { resPanel.removeAttribute("hidden"); resToggle.setAttribute("aria-expanded","true"); }
+  });
 
-function clearUniverse() {
-  particles.forEach(p => { p.decay = 0.025; });
-  gravityWells = [];
-  const d = document.getElementById('modeDisplay');
-  d.textContent = 'HEAT DEATH';
-  d.classList.remove('show');
-  void d.offsetWidth;
-  d.classList.add('show');
-}
+  document.addEventListener("click", function(e){
+    if(!langToggle.contains(e.target) && !langMenu.contains(e.target)){ langMenu.setAttribute("hidden",""); langToggle.setAttribute("aria-expanded","false"); }
+    if(!resToggle.contains(e.target) && !resPanel.contains(e.target)){ resPanel.setAttribute("hidden",""); resToggle.setAttribute("aria-expanded","false"); }
+  });
 
-// ─── Init ───
-initBgStars();
-initNebula();
-for (let i = 0; i < 80; i++) {
-  const angle = Math.random() * 6.28;
-  const dist = Math.random() * 220 + 80;
-  spawnParticle(
-    W / 2 + Math.cos(angle) * dist,
-    H / 2 + Math.sin(angle) * dist,
-    {
-      vx: Math.cos(angle + 1.57) * 1.8,
-      vy: Math.sin(angle + 1.57) * 1.8,
-      life: 0.95, decay: 0.00025,
-      r: Math.random() * 2.5 + 0.8
-    }
-  );
-}
-requestAnimationFrame(loop);
+  // Filtering
+  var checkboxes = Array.prototype.slice.call(document.querySelectorAll(".filter-cb"));
+  var groups = Array.prototype.slice.call(document.querySelectorAll(".rgroup"));
+  function applyFilters(){
+    var active = checkboxes.filter(function(c){ return c.checked; }).map(function(c){ return c.value; });
+    groups.forEach(function(group){
+      var cat = group.getAttribute("data-cat");
+      group.classList.toggle("is-hidden", active.indexOf(cat) === -1);
+    });
+  }
+  checkboxes.forEach(function(cb){ cb.addEventListener("change", applyFilters); });
+
+  resPanel.querySelectorAll("button[data-filter]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var val = btn.getAttribute("data-filter");
+      checkboxes.forEach(function(cb){ cb.checked = (val === "all") ? true : (cb.value === val); });
+      applyFilters();
+      resPanel.setAttribute("hidden","");
+      resToggle.setAttribute("aria-expanded","false");
+      document.getElementById("resources").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  });
+})();
 </script>
+
 </body>
 </html>
